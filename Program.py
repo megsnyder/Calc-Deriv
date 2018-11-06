@@ -16,12 +16,12 @@ def extrema(equation, interval):
         if prenEliminator(expression[0],expression[1]) == 0:
             zeroes.append(i)
             status = 0
-        elif prenEliminator(expression[0],expression[1]) > 0:
-            incr.append(i)
-        elif prenEliminator(expression[0],expression[1]) < 0:
-            decr.append(i)
-    print("Increasing:", incr)
-    print("Decreasing:", decr)
+        #elif prenEliminator(expression[0],expression[1]) > 0:
+        #    incr.append(i)
+        #elif prenEliminator(expression[0],expression[1]) < 0:
+        #    decr.append(i)
+    #print("Increasing:", incr)
+    #print("Decreasing:", decr)
     print("Zeroes:", zeroes)
     
 def getOperandsAndTerms(equation):
