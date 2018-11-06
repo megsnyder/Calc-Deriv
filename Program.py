@@ -1,8 +1,16 @@
-def derivative(equation):
+def derivative(equation, interval):
     if equation.find("=") != -1:
         equation = equation[equation.find("=")+1:len(equation)]
-    a = getOperandsAndTerms(equation)
-    print(pluggerSetup("y", "x", equation))
+    final = pluggerSetup("y", "x", equation)
+    print(final)
+    extrema(final, interval)
+    
+def extrema(equation, interval):
+    #print(list(range(interval[0],interval[1]+1)))
+    for i in range(interval[0],interval[1]+1):
+        expression = getOperandsAndTerms(equation.format(i))
+        if round(prenEliminator(expression[0],expression[1])*1000) == 0:
+            print("hey",i)
     
 def getOperandsAndTerms(equation):
     #initial Seperation
@@ -80,9 +88,9 @@ def prenEliminator(terms, operands):
     g = 0 #Just a method to stop infinite loops if there is an error in my code
     
     while pp == 1 and g != 20:
-        print("while", newTerms, "g=", g)
-        print("pren:", newTerms)
-        print("pren:", operands)
+        #print("while", newTerms, "g=", g)
+        #print("pren:", newTerms)
+        #print("pren:", operands)
         g += 1
         pcheck = ""
             
@@ -97,13 +105,13 @@ def prenEliminator(terms, operands):
                     currentTerm = (newTerms[i])[k]
                     term += currentTerm
                     if currentTerm == "(":
-                        print("Hey we found an opening parenthesis!", newTerms, k)
+                        #print("Hey we found an opening parenthesis!", newTerms, k)
                         outside += term[0:len(term)-1:]
-                        print("This is the outside:", outside)
+                        #print("This is the outside:", outside)
                         if len(outside) > 0:
-                            print("The outside is longer than 0")
+                            #print("The outside is longer than 0")
                             if outside[len(outside) - 1] == ")" or outside[len(outside) - 1].isdigit() == True or outside[len(outside) - 1] == "x" or outside[len(outside) - 1] == "y":
-                                print("We decided to add a multiplier")
+                                #print("We decided to add a multiplier")
                                 outside += "*"
                         term = "("
                     elif currentTerm == ")" and term[0] == "(" and len(term[1:len(term)-1:]) > 0:
@@ -120,7 +128,7 @@ def prenEliminator(terms, operands):
                     if outside[len(outside) - 1].isdigit() == True and term[0].isdigit == True:
                         term = "*" + term
                     outside += term
-                    print("cash me", outside, term)
+                    #print("cash me", outside, term)
                 else:
                     outside += term
                     
@@ -212,4 +220,4 @@ def pluggerSetup(depVar, indepVar, equation):
         #print(output)
     return output
     
-derivative("y=(69/x-3)^3+x")
+derivative("y=100-x^2", [-100,100])
