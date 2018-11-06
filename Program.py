@@ -6,11 +6,23 @@ def derivative(equation, interval):
     extrema(final, interval)
     
 def extrema(equation, interval):
+    incr = []
+    decr = []
+    zeroes = []
+    status = 0
     #print(list(range(interval[0],interval[1]+1)))
     for i in range(interval[0],interval[1]+1):
         expression = getOperandsAndTerms(equation.format(i))
-        if round(prenEliminator(expression[0],expression[1])*1000) == 0:
-            print("hey",i)
+        if prenEliminator(expression[0],expression[1]) == 0:
+            zeroes.append(i)
+            status = 0
+        elif prenEliminator(expression[0],expression[1]) > 0:
+            incr.append(i)
+        elif prenEliminator(expression[0],expression[1]) < 0:
+            decr.append(i)
+    print("Increasing:", incr)
+    print("Decreasing:", decr)
+    print("Zeroes:", zeroes)
     
 def getOperandsAndTerms(equation):
     #initial Seperation
