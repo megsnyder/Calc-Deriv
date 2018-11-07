@@ -1,6 +1,36 @@
 def derivative(equation, interval):
     if equation.find("=") != -1:
         equation = equation[equation.find("=")+1:len(equation)]
+    '''
+    terms= []
+    terms2=[]
+    start=0
+    ppres=0
+    plus=0
+    for i in range(0,len(equation)):
+        if equation[i] == '(':
+
+            for ppres in range(0,len(equation)):
+                if equation[ppres] == ')':
+                    
+                    paren=equation[i:ppres+1]
+                    terms.append(paren)
+                    print(paren)
+                    
+        if equation[i] == '+':
+            term1 = equation[start:i]
+            terms.append(term1)
+            start=i+1
+    terms.append(equation[start:len(equation)])
+            
+    for i in range(0,len(terms)):
+        if terms[i].find('x') != -1:
+            if terms[i].count(")") ==1 and terms[i].count("(") ==1:
+                terms2.append(terms[i])
+            if terms[i].find("(") == -1 and terms[i].find(")") == -1:
+                terms2.append(terms[i])
+    print(terms2)
+    '''
     final = pluggerSetup("y", "x", equation)
     print(final)
     extrema(final, interval)
