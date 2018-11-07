@@ -31,6 +31,9 @@ def derivative(equation, interval):
                 terms2.append(terms[i])
     print(terms2)
     '''
+    '''
+    Integrate: -, parenthesis, and operators
+    '''
     final = pluggerSetup("y", "x", equation)
     print(final)
     extrema(final, interval)
