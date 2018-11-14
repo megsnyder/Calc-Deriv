@@ -40,8 +40,9 @@ def funcInterpreter(depVar, indepVar, equation,t):
         points = []
         #for i in range(1,10):
         #    points.append((funcPlugger(depVar, indepVar, str(pluggableEquation), i)))
-        points.append((funcPlugger(depVar, indepVar, str(pluggableEquation), t)))
-        #points = "nil"    
+        points = (funcPlugger(depVar, indepVar, str(pluggableEquation), t))
+        #points = "nil"
+        
         return(points)
       
 def prenEliminator(terms, operands):
