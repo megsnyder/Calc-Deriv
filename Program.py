@@ -208,6 +208,9 @@ def getOperandsAndTerms(equation):
     if term != "":
         terms.append(term)
     #print("GottenTerms", terms, "GottenOperands", operands, "from", equation)
+    for i in range(0,len(terms)):
+        if terms[i] == "-":
+            terms[i] = "-1"
     return((terms,operands))
     
 def funcSolver(terms, operands):
@@ -362,12 +365,15 @@ def pluggerSetup(depVar, indepVar, equation):
             if len(output)>0:
                 if output[len(output)-1].isdigit():
                     output += "*"+"{0}"
+                elif output[len(output)-1] == "-":
+                    output += "1" + "*" + "{0}"
                 else:
                     output += "{0}"
             else:
                 output += "{0}"
+                
         elif len(output)>0: 
-            if output[len(output)-1] == "}" and i.isdigit():
+            if output[len(output)-1] == "}" and (i.isdigit() or i == "(" or i == "{"):
                 output += "*"+i
             else:
                 output += i
