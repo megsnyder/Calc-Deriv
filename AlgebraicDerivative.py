@@ -186,7 +186,6 @@ def deriv(indepVar, term):
             else:
                 if term[len(term)-1].isdigit() and term[len(term)-2] != "^":
                     coefficient = term[0:term.find(indepVar)] + "*" + term[len(term)-1]
-                    print("CEOF",coefficient)
                 else:
                     coefficient = term[0:term.find(indepVar)]
                 coefficient = funcSolver(getOperandsAndTerms(coefficient)[0],getOperandsAndTerms(coefficient)[1])
