@@ -148,10 +148,11 @@ def deriv(indepVar, term):
                     power = 1
                     coefficient = term[0:term.find(indepVar)] + "*" + term[term.find(indepVar)+1+4:len(term)]
                 else:
-                    print("ey")
                     term = term[0:term.find(indepVar)+1] + indepVar + "^1" + term[term.find(indepVar)+1:len(term)]
                     power = 1
                     coefficient = term[0:term.find(indepVar)] + "*" + term[term.find(indepVar)+1+4:len(term)]
+            else:
+                coefficient = ""
         else:
             term = term + "^1"
             power = 1
@@ -183,7 +184,11 @@ def deriv(indepVar, term):
                 coefficient = term[0:term.find(indepVar)] + term[index - 1: len(term)]
                 coefficient = funcSolver(getOperandsAndTerms(coefficient)[0],getOperandsAndTerms(coefficient)[1])
             else:
-                coefficient = term[0:term.find(indepVar)]
+                if term[len(term)-1].isdigit() and term[len(term)-2] != "^":
+                    coefficient = term[0:term.find(indepVar)] + "*" + term[len(term)-1]
+                    print("CEOF",coefficient)
+                else:
+                    coefficient = term[0:term.find(indepVar)]
                 coefficient = funcSolver(getOperandsAndTerms(coefficient)[0],getOperandsAndTerms(coefficient)[1])
         if power == 0:
             power = getOperandsAndTerms(term[term.find("^")+1:len(term)])[0]
