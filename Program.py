@@ -455,8 +455,8 @@ def derivative(equation, interval):
             if extremasort[i][1]>extremasort[i+1][1]:
                 print("Decreasing on interval: [" + str(extremasort[i][0]) + "," + str(extremasort[i+1][0]) + "]")
                 
-    poi=[]
- 
+    poi=[dpointsfull[0],dpointsfull[len(dpointsfull[0])]
+        
     for i in range(0,len(d2points)):
         if len(d2points)>i+1:
             if d2points[i]>0:
@@ -477,12 +477,6 @@ def derivative(equation, interval):
                         if d2points[i+2]>0:
                             print("Point of inflection at: " + str(dpointsfull[i+1]))
                             poi.append(dpointsfull[i+1])
-    if len(poi)>0:
-        y=poi[0]
-        for i in range(0,len(poi)):
-            if y[1]<poi[i][1]:
-                y = poi[i]
-                
             
     poisort=[]
     for i in range(0,len(poi)):
