@@ -208,9 +208,6 @@ def getOperandsAndTerms(equation):
     if term != "":
         terms.append(term)
     #print("GottenTerms", terms, "GottenOperands", operands, "from", equation)
-    for i in range(0,len(terms)):
-        if terms[i] == "-":
-            terms[i] = "-1"
     return((terms,operands))
     
 def funcSolver(terms, operands):
@@ -365,15 +362,12 @@ def pluggerSetup(depVar, indepVar, equation):
             if len(output)>0:
                 if output[len(output)-1].isdigit():
                     output += "*"+"{0}"
-                elif output[len(output)-1] == "-":
-                    output += "1" + "*" + "{0}"
                 else:
                     output += "{0}"
             else:
                 output += "{0}"
-                
         elif len(output)>0: 
-            if output[len(output)-1] == "}" and (i.isdigit() or i == "(" or i == "{"):
+            if output[len(output)-1] == "}" and i.isdigit():
                 output += "*"+i
             else:
                 output += i
@@ -431,12 +425,23 @@ def derivative(equation, interval):
                         if dpoints[i+2]>0:
                             print("Local min at: " + str(points[i+1]))
                             extremas.append(points[i+1])
-    
-    print(extremas)
+    if len(extremas)>0:
+        y=extremas[0]
+        for i in range(0,len(extremas)):
+            if y[1]<extremas[i][1]:
+                y = extremas[i]
+                
+            
+    extremasort=[]
     for i in range(0,len(extremas)):
-        if extremas[i][1]<extremas[i+1][1]:
+        extremasort.append(extremas[i])
+        extremasort.sort()
+    print(extremasort)
+    
+    for i in range(0,len(extremasort)):
+        if extremasort[i][1]<extremasort[i+1][1]:
             print("Increasing on interval: [" + str(extremas[i][0]) + "," + str(extremas[i+1][0]) + "]")
-        if extremas[i][1]>extremas[i+1][1]:
+        if extremasort[i][1]>extremasort[i+1][1]:
             print("Decreasing on interval: [" + str(extremas[i][0]) + "," + str(extremas[i+1][0]) + "]")
             
     '''
