@@ -84,41 +84,6 @@ def funcInterpreter(depVar, indepVar, equation,t):
         #points = "nil"    
         return(points)
         
-def depVarSolver(depVar, indepVar, equation):
-    print("Implicit function entered, Isolating dependent variable")
-    if equation.find("=")!= 1:
-        equationL = equation[0:equation.find("=")-1]
-        equationL = expressionSplitter(equationL)
-    else:
-        equationL = [equation[0]]
-    equationR = equation[equation.find("=")+1: len(equation)]
-    equationR = expressionSplitter("y", equationR)
-    #newEquation = equationL +"="+equationR
-    return(equationL, "=", equationR)
-    
-def expressionSplitter(depVar, expression):
-    if expression.find(depVar) == -1:
-        print("DepVar not found", expression)
-        return([expression])
-    else:
-        terms = []
-        term = ""
-        p = 0
-        for i in expression:
-            term += i
-            if i == "(":
-                p += 1
-            elif i == ")":
-                p -= 1
-            if i == "+" and p == 0:
-                terms.append(term[0:len(term)-1])
-                term = "+"
-        if term != "":
-            terms.append(term)
-        print("DeVars found", terms)
-        return(terms)
-                
-
 def funcCombiner(equation):
     #print(equation)
     equationL = getOperandsAndTerms(equation[0:equation.find("=")])
@@ -135,14 +100,6 @@ def funcCombiner(equation):
             equationLOperators.append(i)
     return(equationR[0] + equationL[0],equationR[1] + equationLOperators[:])
       
-def funcCompiler(terms, operands):
-    output = ""
-    for i in range(0, len(terms)):
-        output += terms[i]
-        if i < len(terms) - 1:
-            output += operands[i]
-    return(output)
-
 def prenEliminator(terms, operands):
     newTerms = []
     operators = []
