@@ -1,43 +1,3 @@
-def derivative(equation, interval):
-    if equation.find("=") != -1:
-        equation = equation[equation.find("=")+1:len(equation)]
-    '''
-    terms= []
-    terms2=[]
-    start=0
-    ppres=0
-    plus=0
-    for i in range(0,len(equation)):
-        if equation[i] == '(':
-
-            for ppres in range(0,len(equation)):
-                if equation[ppres] == ')':
-                    
-                    paren=equation[i:ppres+1]
-                    terms.append(paren)
-                    print(paren)
-                    
-        if equation[i] == '+':
-            term1 = equation[start:i]
-            terms.append(term1)
-            start=i+1
-    terms.append(equation[start:len(equation)])
-            
-    for i in range(0,len(terms)):
-        if terms[i].find('x') != -1:
-            if terms[i].count(")") ==1 and terms[i].count("(") ==1:
-                terms2.append(terms[i])
-            if terms[i].find("(") == -1 and terms[i].find(")") == -1:
-                terms2.append(terms[i])
-    print(terms2)
-    '''
-    '''
-    Integrate: -, parenthesis, and operators
-    '''
-    final = pluggerSetup("y", "x", equation)
-    print(final)
-    extrema(final, interval)
-    
 def extrema(equation, interval):
     incr = []
     decr = []
@@ -83,22 +43,6 @@ def funcInterpreter(depVar, indepVar, equation,t):
         points.append((funcPlugger(depVar, indepVar, str(pluggableEquation), t)))
         #points = "nil"    
         return(points)
-        
-def funcCombiner(equation):
-    #print(equation)
-    equationL = getOperandsAndTerms(equation[0:equation.find("=")])
-    #print(equationL)
-    equationR = getOperandsAndTerms(equation[equation.find("="):len(equation)-1])
-    #print(equationR)
-    equationLOperators=[]
-    for i in equationL[1]:
-        if i == "-":
-            equationLOperators.append("+")
-        elif i == "+":
-            equationLOperators.append("-")
-        else:
-            equationLOperators.append(i)
-    return(equationR[0] + equationL[0],equationR[1] + equationLOperators[:])
       
 def prenEliminator(terms, operands):
     newTerms = []
@@ -430,5 +374,24 @@ def pluggerSetup(depVar, indepVar, equation):
             output += i
         #print(output)
     return output
-    
+
+def derivative(equation, interval):
+    if equation.find("=") != -1:
+        equation = equation[equation.find("=")+1:len(equation)]
+    point=[]
+    function=input("Function: ")
+    start=float(input("Start: "))
+    end=float(input("End: "))
+    i=start
+    while i<=end:
+        point.append(funcInterpreter("y","x",function,i))
+        i+=1
+    print(point)
+    '''
+    Integrate: -, parenthesis, and operators
+    '''
+    final = pluggerSetup("y", "x", equation)
+    print(final)
+    extrema(final, interval)
+
 derivative("y=100-x^2", [-100,100])
