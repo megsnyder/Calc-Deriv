@@ -392,7 +392,14 @@ def derivative(equation, interval):
     for i in range(0,len(points)):
         dpoints.append(round(((funcInterpreter("y","x",function,points[i][0]+0.00001)[1]-points[i][1])/.00001),4))
     print(dpoints)
-    if funcInterpreter("y","x",function,start)>:
+    if funcInterpreter("y","x",function,start)>funcInterpreter("y","x",function,start+.5):
+        print("Local max at: " + str(points[0]))
+    elif funcInterpreter("y","x",function,start)<funcInterpreter("y","x",function,start+.5):
+        print("Local min at: " + str(points[0]))
+    if funcInterpreter("y","x",function,end)>funcInterpreter("y","x",function,end-.5):
+        print("Local max at: " + str(points[len(points)-1]))
+    elif funcInterpreter("y","x",function,end)<funcInterpreter("y","x",function,end-.5):
+        print("Local min at: " + str(points[len(points)-1]))
     for i in range(0,len(dpoints)):
         if len(dpoints)>i+1:
             if dpoints[i]>0:
