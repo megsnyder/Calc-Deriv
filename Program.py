@@ -395,37 +395,37 @@ def derivative(equation, interval):
     extremas=[]
     if funcInterpreter("y","x",function,start)[1]>funcInterpreter("y","x",function,start+.5)[1]:
         print("Local max at: " + str(points[0]))
-        extremas.append(points[0][1])
+        extremas.append(points[0])
     elif funcInterpreter("y","x",function,start)[1]<funcInterpreter("y","x",function,start+.5)[1]:
         print("Local min at: " + str(points[0]))
-        extremas.append(points[0][1])
+        extremas.append(points[0])
     if funcInterpreter("y","x",function,end)[1]>funcInterpreter("y","x",function,end-.5)[1]:
         print("Local max at: " + str(points[len(points)-1]))
-        extremas.append(points[len(points)-1][1])
+        extremas.append(points[len(points)-1])
     elif funcInterpreter("y","x",function,end)[1]<funcInterpreter("y","x",function,end-.5)[1]:
         print("Local min at: " + str(points[len(points)-1]))
-        extremas.append(points[len(points)-1][1])
+        extremas.append(points[len(points)-1])
     for i in range(0,len(dpoints)):
         if len(dpoints)>i+1:
             if dpoints[i]>0:
                 if dpoints[i+1]<0:
                     print("Local max at: " + str(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2)))
-                    extremas.append(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2)[1])
+                    extremas.append(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2))
                 elif dpoints[i+1]==0:
                     if len(dpoints)>i+2:
                         if dpoints[i+2]<0:
                             print("Local max at: " + str(points[i+1]))
-                            extremas.append(points[i+1][1])
+                            extremas.append(points[i+1])
             if dpoints[i]<0:
                 if dpoints[i+1]>0:
                     print("Local min at: " + str(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2)))
-                    extremas.append(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2)[1])
+                    extremas.append(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2))
                 elif dpoints[i+1]==0:
                     if len(dpoints)>i+2:
                         if dpoints[i+2]>0:
                             print("Local min at: " + str(points[i+1]))
-                            extremas.append(points[i+1][1])
-    print(extremas.sort())
+                            extremas.append(points[i+1])
+    print(extremas)
             
     '''
     Integrate: -, parenthesis, and operators
