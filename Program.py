@@ -425,7 +425,13 @@ def derivative(equation, interval):
                         if dpoints[i+2]>0:
                             print("Local min at: " + str(points[i+1]))
                             extremas.append(points[i+1])
+    
     print(extremas)
+    for i in range(0,len(extremas)):
+        if extremas[i][1]<extremas[i+1][1]:
+            print("Increasing on interval: [" + extremas[i][0] + "," + extremas[i+1][0] + "]")
+        if extremas[i][1]>extremas[i+1][1]:
+            print("Decreasing on interval: [" + extremas[i][0] + "," + extremas[i+1][0] + "]")
             
     '''
     Integrate: -, parenthesis, and operators
