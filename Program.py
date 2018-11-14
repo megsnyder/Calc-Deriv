@@ -429,9 +429,9 @@ def derivative(equation, interval):
     print(extremas)
     for i in range(0,len(extremas)):
         if extremas[i][1]<extremas[i+1][1]:
-            print("Increasing on interval: [" + extremas[i][0] + "," + extremas[i+1][0] + "]")
+            print("Increasing on interval: [" + str(extremas[i][0]) + "," + str(extremas[i+1][0]) + "]")
         if extremas[i][1]>extremas[i+1][1]:
-            print("Decreasing on interval: [" + extremas[i][0] + "," + extremas[i+1][0] + "]")
+            print("Decreasing on interval: [" + str(extremas[i][0]) + "," + str(extremas[i+1][0]) + "]")
             
     '''
     Integrate: -, parenthesis, and operators
