@@ -390,18 +390,18 @@ def derivative(equation, interval):
     while i<=end:
         points.append(funcInterpreter("y","x",function,i))
         i+=1
-    print(points)
+    #print(points)
     for i in range(0,len(points)):
         dpoints.append(round(((funcInterpreter("y","x",function,points[i][0]+0.00001)[1]-points[i][1])/.00001),4))
         dpoint=(points[i][0],round(((funcInterpreter("y","x",function,points[i][0]+0.00001)[1]-points[i][1])/.00001),4))
         dpointsfull.append(dpoint)
-    print(dpoints)
-    print("full" + str(dpointsfull))
+    #print(dpoints)
+    #print("full= " + str(dpointsfull))
     for i in range(0,len(dpoints)):
         if len(dpoints)>i+1:
             d2points.append(round(((dpoints[i+1]-dpoints[i])/(points[i+1][0]-points[i][0])),4))
         
-    print(d2points)
+    #print(d2points)
     extremas=[]
     if funcInterpreter("y","x",function,start)[1]>funcInterpreter("y","x",function,start+.5)[1]:
         print("Local max at: " + str(points[0]))
@@ -446,14 +446,14 @@ def derivative(equation, interval):
     for i in range(0,len(extremas)):
         extremasort.append(extremas[i])
         extremasort.sort()
-    print(extremasort)
+    #print(extremasort)
     
     for i in range(0,len(extremasort)):
         if len(extremasort)>i+1:
             if extremasort[i][1]<extremasort[i+1][1]:
-                print("Increasing on interval: [" + str(extremasort[i][0]) + "," + str(extremasort[i+1][0]) + "]")
+                print("Increasing on interval: [" + str(extremasort[i][0]) + ", " + str(extremasort[i+1][0]) + "]")
             if extremasort[i][1]>extremasort[i+1][1]:
-                print("Decreasing on interval: [" + str(extremasort[i][0]) + "," + str(extremasort[i+1][0]) + "]")
+                print("Decreasing on interval: [" + str(extremasort[i][0]) + ", " + str(extremasort[i+1][0]) + "]")
                 
     poi=[dpointsfull[0],dpointsfull[len(dpointsfull)-1]]
         
@@ -482,14 +482,14 @@ def derivative(equation, interval):
     for i in range(0,len(poi)):
         poisort.append(poi[i])
         poisort.sort()
-    print(poisort)
+    #print(poisort)
     
     for i in range(0,len(poisort)):
         if len(poisort)>i+1:
             if poisort[i][1]<poisort[i+1][1]:
-                print("Concave up on interval: [" + str(poisort[i][0]) + "," + str(poisort[i+1][0]) + "]")
+                print("Concave up on interval: (" + str(poisort[i][0]) + ", " + str(poisort[i+1][0]) + ")")
             if poisort[i][1]>poisort[i+1][1]:
-                print("Concave down on interval: [" + str(poisort[i][0]) + "," + str(poisort[i+1][0]) + "]")
+                print("Concave down on interval: (" + str(poisort[i][0]) + ", " + str(poisort[i+1][0]) + ")")
     
             
     '''
