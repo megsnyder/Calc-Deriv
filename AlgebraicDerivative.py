@@ -1,4 +1,5 @@
 def derivativeHub(equation):
+    print("Finding Derivative of: ", equation)
     expression = ""
     for i in equation[equation.find("=")+1:len(equation)]:
         if i != " ":
@@ -193,7 +194,7 @@ def deriv(indepVar, term):
         if float(power) == 0.0:
             return(str(coefficient))
         else:
-            return(str(coefficient) + str(indepVar) + "^" + str(power))
+            return(str(coefficient) + "*" + str(indepVar) + "^" + str(power))
 
     else:
         output = "0"
@@ -431,4 +432,4 @@ def funcSolver(terms, operands):
     ##print("solved:", final)
     return(final)
     
-print(derivativeHub("y = 2x*2 + x + 3x^2"))
+print(derivativeHub("y = 2x^2*2 + x + 3x^2"))
