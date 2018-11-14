@@ -381,6 +381,7 @@ def derivative(equation, interval):
         equation = equation[equation.find("=")+1:len(equation)]
     points=[]
     dpoints=[]
+    d2points=[]
     function=input("Function: ")
     start=float(input("Start: "))
     end=float(input("End: "))
@@ -392,6 +393,11 @@ def derivative(equation, interval):
     for i in range(0,len(points)):
         dpoints.append(round(((funcInterpreter("y","x",function,points[i][0]+0.00001)[1]-points[i][1])/.00001),4))
     print(dpoints)
+    for i in range(0,len(dpoints)):
+        if len(dpoints)>i+1:
+            d2points.append(round(((dpoints[i+1]-dpoints[i])/(points[i+1][0]-points[i][0])),4))
+        
+    print(d2points)
     extremas=[]
     if funcInterpreter("y","x",function,start)[1]>funcInterpreter("y","x",function,start+.5)[1]:
         print("Local max at: " + str(points[0]))
@@ -439,10 +445,54 @@ def derivative(equation, interval):
     print(extremasort)
     
     for i in range(0,len(extremasort)):
-        if extremasort[i][1]<extremasort[i+1][1]:
-            print("Increasing on interval: [" + str(extremas[i][0]) + "," + str(extremas[i+1][0]) + "]")
-        if extremasort[i][1]>extremasort[i+1][1]:
-            print("Decreasing on interval: [" + str(extremas[i][0]) + "," + str(extremas[i+1][0]) + "]")
+        if len(extremasort)>i+1:
+            if extremasort[i][1]<extremasort[i+1][1]:
+                print("Increasing on interval: [" + str(extremasort[i][0]) + "," + str(extremasort[i+1][0]) + "]")
+            if extremasort[i][1]>extremasort[i+1][1]:
+                print("Decreasing on interval: [" + str(extremasort[i][0]) + "," + str(extremasort[i+1][0]) + "]")
+                
+    poi=[]
+ 
+    for i in range(0,len(d2points)):
+        if len(d2points)>i+1:
+            if d2points[i]>0:
+                if d2points[i+1]<0:
+                    print("Point of inflection at: " + str("y","x",function,(points[i][0]+points[i+1][0])/2))
+                    poi.append(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2))
+                elif d2points[i+1]==0:
+                    if len(d2points)>i+2:
+                        if d2points[i+2]<0:
+                            print("Point of inflection at: " + str(points[i+1]))
+                            poi.append(points[i+1])
+            if d2points[i]<0:
+                if d2points[i+1]>0:
+                    print("Point of inflection at: " + str(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2)))
+                    poi.append(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2))
+                elif d2points[i+1]==0:
+                    if len(d2points)>i+2:
+                        if d2points[i+2]>0:
+                            print("Point of inflection at: " + str(points[i+1]))
+                            poi.append(points[i+1])
+    if len(poi)>0:
+        y=poi[0]
+        for i in range(0,len(poi)):
+            if y[1]<poi[i][1]:
+                y = poi[i]
+                
+            
+    poisort=[]
+    for i in range(0,len(poi)):
+        poisort.append(poi[i])
+        poisort.sort()
+    print(poisort)
+    
+    for i in range(0,len(poisort)):
+        if len(poisort)>i+1:
+            if poisort[i][1]<poisort[i+1][1]:
+                print("Concave up on interval: [" + str(poisort[i][0]) + "," + str(poisort[i+1][0]) + "]")
+            if poisort[i][1]>poisort[i+1][1]:
+                print("Concave down on interval: [" + str(poisort[i][0]) + "," + str(poisort[i+1][0]) + "]")
+    
             
     '''
     Integrate: -, parenthesis, and operators
