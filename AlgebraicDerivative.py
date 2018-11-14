@@ -134,8 +134,13 @@ def deriv(indepVar, term):
         output = ""
         terms = getOperandsAndTerms(term)[0]
         operands = getOperandsAndTerms(term)[1]
-        #for i in range(len(operands)):
-        #    if operands[i] == "/":
+        num = "" #Numerator
+        denom = "" #Denominator
+        num += terms[0]
+        for i in range(len(operands)):
+            if i == "/":
+                print("meh")
+                
         return(output)
     #Quotient
     #Product
