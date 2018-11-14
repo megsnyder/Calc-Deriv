@@ -455,7 +455,7 @@ def derivative(equation, interval):
             if extremasort[i][1]>extremasort[i+1][1]:
                 print("Decreasing on interval: [" + str(extremasort[i][0]) + "," + str(extremasort[i+1][0]) + "]")
                 
-    poi=[dpointsfull[0],dpointsfull[len(dpointsfull[0])]
+    poi=[dpointsfull[0],dpointsfull[len(dpointsfull)-1]]
         
     for i in range(0,len(d2points)):
         if len(d2points)>i+1:
