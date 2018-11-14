@@ -382,6 +382,7 @@ def derivative(equation, interval):
     points=[]
     dpoints=[]
     d2points=[]
+    dpointsfull=[]
     function=input("Function: ")
     start=float(input("Start: "))
     end=float(input("End: "))
@@ -392,7 +393,10 @@ def derivative(equation, interval):
     print(points)
     for i in range(0,len(points)):
         dpoints.append(round(((funcInterpreter("y","x",function,points[i][0]+0.00001)[1]-points[i][1])/.00001),4))
+        dpoint=(points[i][0],round(((funcInterpreter("y","x",function,points[i][0]+0.00001)[1]-points[i][1])/.00001),4))
+        dpointsfull.append(dpoint)
     print(dpoints)
+    print("full" + str(dpointsfull))
     for i in range(0,len(dpoints)):
         if len(dpoints)>i+1:
             d2points.append(round(((dpoints[i+1]-dpoints[i])/(points[i+1][0]-points[i][0])),4))
@@ -457,22 +461,22 @@ def derivative(equation, interval):
         if len(d2points)>i+1:
             if d2points[i]>0:
                 if d2points[i+1]<0:
-                    print("Point of inflection at: " + str("y","x",function,(points[i][0]+points[i+1][0])/2))
-                    poi.append(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2))
+                    print("Point of inflection at: " + str("y","x",function,(dpointsfull[i][0]+dpointsfull[i+1][0])/2))
+                    poi.append(funcInterpreter("y","x",function,(dpointsfull[i][0]+dpointsfull[i+1][0])/2))
                 elif d2points[i+1]==0:
                     if len(d2points)>i+2:
                         if d2points[i+2]<0:
-                            print("Point of inflection at: " + str(points[i+1]))
-                            poi.append(points[i+1])
+                            print("Point of inflection at: " + str(dpointsfull[i+1]))
+                            poi.append(dpointsfull[i+1])
             if d2points[i]<0:
                 if d2points[i+1]>0:
-                    print("Point of inflection at: " + str(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2)))
-                    poi.append(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2))
+                    print("Point of inflection at: " + str(funcInterpreter("y","x",function,(dpointsfull[i][0]+dpointsfull[i+1][0])/2)))
+                    poi.append(funcInterpreter("y","x",function,(dpointsfull[i][0]+dpointsfull[i+1][0])/2))
                 elif d2points[i+1]==0:
                     if len(d2points)>i+2:
                         if d2points[i+2]>0:
-                            print("Point of inflection at: " + str(points[i+1]))
-                            poi.append(points[i+1])
+                            print("Point of inflection at: " + str(dpointsfull[i+1]))
+                            poi.append(dpointsfull[i+1])
     if len(poi)>0:
         y=poi[0]
         for i in range(0,len(poi)):
