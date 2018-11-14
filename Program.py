@@ -379,15 +379,19 @@ def pluggerSetup(depVar, indepVar, equation):
 def derivative(equation, interval):
     if equation.find("=") != -1:
         equation = equation[equation.find("=")+1:len(equation)]
-    point=[]
+    points=[]
+    dpoints=[]
     function=input("Function: ")
     start=float(input("Start: "))
     end=float(input("End: "))
     i=start
     while i<=end:
-        point.append(funcInterpreter("y","x",function,i))
+        points.append(funcInterpreter("y","x",function,i))
         i+=1
-    print(point)
+    print(points)
+    for i in range(0,len(points)):
+        dpoints.append((funcInterpreter("y","x",function,points[i][0]+0.0001)-points[i][1])/.0001)
+    print(dpoints)
     '''
     Integrate: -, parenthesis, and operators
     '''
