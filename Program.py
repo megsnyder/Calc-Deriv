@@ -390,7 +390,7 @@ def derivative(equation, interval):
         i+=1
     print(points)
     for i in range(0,len(points)):
-        dpoints.append((funcInterpreter("y","x",function,points[i][0]+0.0001)-points[i][1])/.0001)
+        dpoints.append(round(((funcInterpreter("y","x",function,points[i][0]+0.00001)[1]-points[i][1])/.00001),5))
     print(dpoints)
     '''
     Integrate: -, parenthesis, and operators
