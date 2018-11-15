@@ -493,9 +493,11 @@ def derivative(function, start, end):
     #comparing the points of inflection in the same way we compared extrema allows us to determine concave up/down (why we added endpoints to the list of points of inflection)
     for i in range(0,len(poisort)): #runs through the sorted points of inflection
         if len(poisort)>i+1: #makes sure loop range isn't exceeded
-            if poisort[i][1]<poisort[i+1][1]: #if point of inflection or endpoint is smaller than the next point of inflection, the function is concave up between them, open brackets
+            d1=(funcInterpreter("y","x",function,poisort[i][0]+0.000001)[1]-funcInterpreter("y","x",function,poisort[i][0])[1])/.000001 #derivative at point of inflection x value
+            d2=(funcInterpreter("y","x",function,poisort[i+1][0]+0.000001)[1]-funcInterpreter("y","x",function,poisort[i+1][0])[1])/.000001 #derivative at the next point of inflection x value
+            if d1<d2: #if the derivative at the point of inflection or endpoint is smaller than the next point of inflection, the function is concave up between them, open brackets
                 print("Concave up on interval: (" + str(poisort[i][0]) + ", " + str(poisort[i+1][0]) + ")")
-            if poisort[i][1]>poisort[i+1][1]: #if point of inflection or endpoint is bigger than the next point of inflection, the function is concave down between them, open brackets
+            if d1>d2: #if the derivative at the point of inflection or endpoint is bigger than the next point of inflection, the function is concave down between them, open brackets
                 print("Concave down on interval: (" + str(poisort[i][0]) + ", " + str(poisort[i+1][0]) + ")")
     
 
