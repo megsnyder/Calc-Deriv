@@ -345,6 +345,7 @@ def funcPlugger(depVar, indepVar, equation, t):
     a = getOperandsAndTerms(equation.format(t))
     b = prenEliminator(a[0],a[1])
     c = 0
+    #print("Wubbo", equation.format(t),a,b)
     if isinstance(b, (list,)):
         #print(b)
         for i in b:
@@ -365,12 +366,15 @@ def pluggerSetup(depVar, indepVar, equation):
             if len(output)>0:
                 if output[len(output)-1].isdigit():
                     output += "*"+"{0}"
+                elif output[len(output)-1] == "-":
+                    output += "1" + "*" + "{0}"
                 else:
                     output += "{0}"
             else:
                 output += "{0}"
+                
         elif len(output)>0: 
-            if output[len(output)-1] == "}" and i.isdigit():
+            if output[len(output)-1] == "}" and (i.isdigit() or i == "(" or i == "{"):
                 output += "*"+i
             else:
                 output += i
