@@ -429,10 +429,10 @@ def derivative(function, start, end):
         for i in range(1,len(extremas)): #run through the list of local extrema
             if y[1]<extremas[i][1]: #if one of the extremas is bigger than the first, this changes the variable y to the bigger one
                 y = extremas[i]
-                maxabsolute=[extremas[i]]
-            elif y[1]==extremas[i][1]:
-                maxabsolute.append(extremas[i])
-    for i in maxabsolute:
+                maxabsolute=[extremas[i]] #changes the absolute max to the bigger extrema
+            elif y[1]==extremas[i][1]: #if they equal, they could both be absolute maxes
+                maxabsolute.append(extremas[i]) #add the equal point while keeping the old one so it will print multiple, if present
+    for i in maxabsolute: #prints out all the absolute maxes
         print("Absolute max at: " + str(i))
         
     minabsolute=[]
