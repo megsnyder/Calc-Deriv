@@ -105,11 +105,12 @@ def deriv(indepVar, term):
                     coefficient = term[0:term.find(indepVar)] + "*" + term[len(term)-1]
                 else:
                     coefficient = term[0:term.find(indepVar)]
-                print(coefficient)
+                #print(coefficient)
                 if coefficient != "":
                     coefficient = funcSolver(getOperandsAndTerms(coefficient)[0],getOperandsAndTerms(coefficient)[1])
                 else:
                     coefficient = 1
+
         if power == 0:
             power = getOperandsAndTerms(term[term.find("^")+1:len(term)])[0]
             power = power[0]
@@ -122,19 +123,21 @@ def deriv(indepVar, term):
             return(str(coefficient) + "*" + str(indepVar) + "^" + str(power))
 
     else:
-        output = "0"
+        output = 0
         if term[0] == "+":
-            term = "-", term[1:len(term)]
+            term = term[1:len(term)]
         terms = getOperandsAndTerms(term)[0]
         operands = getOperandsAndTerms(term)[1]
-        #print(terms,operands)
+        print(terms,operands)
         coefficient = ""
         num = "" #Numerator
         denom = "" #Denominator
         derivatives = {}
         for i in range(0,len(terms)):
             if terms[i].find(indepVar) != -1:
-                if operands[i-1] == "*":
+                if i == 0:
+                    num = terms[i]
+                elif operands[i-1] == "*":
                     if num != "":
                         num += operands[i-1] + terms[i]
                     else:
@@ -157,6 +160,20 @@ def deriv(indepVar, term):
                 #EXPO
             elif i==0:
                 coefficient == terms[i]
+            elif operands[i-1] == "^":
+                if 0 < i - 2:
+                    if operands[i-2] == "*":
+                        num += operands[i-1] + terms[i]
+                    elif operands[i-2] == "/":
+                        denom += operands[i-1] + terms[i]
+                    else:
+                        print("EXPONENT RAISED TO AN EXPONENT")
+                    
+                elif terms[0].isdigit():
+                    coefficient += operands[i-1]
+                    coefficient += terms[i]
+                else:
+                    num += operands[i-1] + terms[i]
             else:
                 coefficient += operands[i-1] + terms[i] 
         if coefficient == "":
@@ -164,15 +181,33 @@ def deriv(indepVar, term):
         print(num, coefficient)
         print("______")
         print(denom)
-        if denom != "":
+        if denom != "": #QUOTIENT RULE
             output = "("+str(coefficient)+ "*"+ denom+ "*"+ deriv(indepVar, num)+ "-"+ num+ "*"+ deriv(indepVar, denom)+")"+"/"+ denom+ "^2"
         else:
-            num = getOperandsAndTerms(num)[0]
-            for i in num:
-                tempOutput = i
-                for k in num:
+            num = getOperandsAndTerms(num)
+            newTerms = []
+            newTerms.append(num[0][0])
+            newOperands = []
+            for  i in range(1,len(num[0])):
+                if num[1][i-1] == "^":
+                    newTerms[len(newTerms)-1] = newTerms[len(newTerms)-1]+"^"+num[0][i]
+                else:
+                    newOperands.append(num[1][i-1])
+                    newTerms.append(num[0][i])
+            print("NUMMM", newTerms)
+            print("DERV:", deriv("x", newTerms[0]), deriv("x", newTerms[1]))
+            print("FOR")
+            output = ""
+            for i in range(0,len(newTerms)):
+                if i != 0:
+                    tempOutput = "+" + newTerms[i]
+                else:
+                    tempOutput = newTerms[i]
+                print(newTerms[i])
+                for k in range(0,len(newTerms)):
                     if k!=i:
-                        tempOutput += "*" + deriv(indepVar, k)
+                        tempOutput += "*" + deriv(indepVar, newTerms[k])
+                        print("*" + deriv(indepVar, newTerms[k]))
                 output += tempOutput
         #GUTSTUFF    
         #elif operands[0] == "^":
@@ -485,5 +520,5 @@ def funcSolver(terms, operands):
     ##print("solved:", final)
     return(final)
     
-print(derivativeHub("y = x/x"))
+print(derivativeHub("y = (x+1)"))
 #print(expressionSplitter("x","2(x+1)^2"))
