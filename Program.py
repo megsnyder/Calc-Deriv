@@ -452,7 +452,6 @@ def derivative(function, start, end):
     for i in range(0,len(extremas)):
         extremasort.append(extremas[i])
         extremasort.sort()
-    #print(extremasort)
     
     for i in range(0,len(extremasort)):
         if len(extremasort)>i+1:
@@ -498,7 +497,7 @@ def derivative(function, start, end):
     
 
 
-function=input("Function: ")
-start=float(input("Start: "))
-end=float(input("End: "))
-derivative(function, start, end)
+function=input("Function: ") #input the function
+start=float(input("Start: ")) #input the start of the interval 
+end=float(input("End: ")) #input the end of the interval
+derivative(function, start, end) #calls the derivative function
