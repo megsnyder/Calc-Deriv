@@ -12,7 +12,7 @@ def derivativeHub(equation):
     
 def expressionSplitter(indepVar, expression):
     if expression.find(indepVar) == -1:
-        print("IndepVars not found", expression)
+        #print("IndepVars not found", expression)
         return([expression])
     else:
         terms = []
@@ -48,8 +48,148 @@ def expressionSplitter(indepVar, expression):
             else:
                 terms.append(term)
         
-        print("IndepVars found", terms)
+        #print("IndepVars found", terms)
         return(terms)
+
+def deriv(indepVar, term):
+    #print("DERIV WITH TERM:",term)
+    if term.find(indepVar) == -1:
+        return("0")
+    elif term.count(indepVar) == 1 and term.count("(") == 0:
+        coefficient = ""
+        power = 0
+        if len(term) >= term.find(indepVar)+2:
+            if term[term.find(indepVar)+1] != "^":
+                if term[term.find(indepVar)+1].isdigit():
+                    term = term[0:term.find(indepVar)+1] + indepVar + "^1*" + term[term.find(indepVar)+1:len(term)]
+                    power = 1
+                    coefficient = term[0:term.find(indepVar)] + "*" + term[term.find(indepVar)+1+4:len(term)]
+                else:
+                    term = term[0:term.find(indepVar)+1] + indepVar + "^1" + term[term.find(indepVar)+1:len(term)]
+                    power = 1
+                    coefficient = term[0:term.find(indepVar)] + "*" + term[term.find(indepVar)+1+4:len(term)]
+            else:
+                coefficient = ""
+        else:
+            term = term + "^1"
+            power = 1
+            coefficient = term[0:term.find(indepVar)]
+        #print(coefficient)
+        if coefficient != "":
+            if coefficient[0] == "+":
+                if len(coefficient) == 1:
+                    coefficient = 1
+                else:
+                    coefficient = coefficient[1:len(coefficient)]
+            #print(coefficient)
+            coefficient = funcSolver(getOperandsAndTerms(coefficient)[0],getOperandsAndTerms(coefficient)[1])
+        else:
+            i = 0
+            index = 0
+            while i < 4 and index < len(term):
+                if term[i] == "x":
+                    i += 1
+                elif term[i] == "^" and i == 1:
+                    i += 1
+                elif term[i].isdigit() and i == 2:
+                    i += 1
+                elif term[i].isdigit() == False and i == 3:
+                    i += 1
+                
+                index += 1
+            if index != len(term) and index - 1 != len(term):
+                coefficient = term[0:term.find(indepVar)] + term[index - 1: len(term)]
+                coefficient = funcSolver(getOperandsAndTerms(coefficient)[0],getOperandsAndTerms(coefficient)[1])
+            else:
+                if term[len(term)-1].isdigit() and term[len(term)-2] != "^":
+                    coefficient = term[0:term.find(indepVar)] + "*" + term[len(term)-1]
+                else:
+                    coefficient = term[0:term.find(indepVar)]
+                print(coefficient)
+                if coefficient != "":
+                    coefficient = funcSolver(getOperandsAndTerms(coefficient)[0],getOperandsAndTerms(coefficient)[1])
+                else:
+                    coefficient = 1
+        if power == 0:
+            power = getOperandsAndTerms(term[term.find("^")+1:len(term)])[0]
+            power = power[0]
+        coefficient = str(coefficient) + "*" + str(power)
+        coefficient = funcSolver(getOperandsAndTerms(coefficient)[0],getOperandsAndTerms(coefficient)[1])
+        power = str(float(power) - 1)
+        if float(power) == 0.0:
+            return(str(coefficient))
+        else:
+            return(str(coefficient) + "*" + str(indepVar) + "^" + str(power))
+
+    else:
+        output = "0"
+        if term[0] == "+":
+            term = term[1:len(term)]
+        terms = getOperandsAndTerms(term)[0]
+        operands = getOperandsAndTerms(term)[1]
+        #print(terms,operands)
+        coefficient = ""
+        num = "" #Numerator
+        denom = "" #Denominator
+        derivatives = {}
+        for i in range(0,len(terms)):
+            if terms[i].find(indepVar) != -1:
+                if operands[i-1] == "*":
+                    if num != "":
+                        num += operands[i-1] + terms[i]
+                    else:
+                        num += terms[i]
+                elif operands[i-1] == "/":
+                    if denom != "":
+                        denom += operands[i-1] + terms[i]
+                    else:
+                        denom += terms[i]
+                    print(i,operands[i-1], terms)
+                elif operands[i-1] == "^" and (terms[i-1].find(indepVar)!= -1 or terms[i].find(indepVar)):
+                    if operands[i-1] == "*":
+                        num += "^" + term[i]
+                    elif operands[i-1] == "/":
+                        denom += "^" + term[i]
+                    else:
+                        print("EXPONENT RAISED TO AN EXPONENT?")
+                #LOG
+                #TRIG
+                #EXPO
+            elif i==0:
+                coefficient == terms[i]
+            else:
+                coefficient += operands[i-1] + terms[i] 
+        if coefficient == "":
+            coefficient = "1"
+        print(num, coefficient)
+        print("______")
+        print(denom)
+        if denom != "":
+            output = "("+str(coefficient)+ "*"+ denom+ "*"+ deriv(indepVar, num)+ "-"+ num+ "*"+ deriv(indepVar, denom)+")"+"/"+ denom+ "^2"
+        else:
+            num = getOperandsAndTerms(num)[0]
+            for i in num:
+                tempOutput = i
+                for k in num:
+                    if k!=i:
+                        tempOutput += "*" + deriv(indepVar, k)
+                output += tempOutput
+        #GUTSTUFF    
+        #elif operands[0] == "^":
+        #    print("POWER")
+        return(output)
+    #Quotient
+    #Product
+    #Power
+    #Trig
+    #Log
+    #Expo
+    #Constant
+
+
+
+
+
 
 def getOperandsAndTerms(equation):
     #initial Seperation
@@ -132,102 +272,11 @@ def getOperandsAndTerms(equation):
     if term != "":
         terms.append(term)
     #print("GottenTerms", terms, "GottenOperands", operands, "from", equation)
+    for i in range(0,len(terms)):
+        #print(terms[i])
+        if terms[i] == "-":
+            terms[i] = "-1"
     return((terms,operands))
-
-def deriv(indepVar, term):
-    print("DERIV WITH TERM:",term)
-    if term.find(indepVar) == -1:
-        return("0")
-    elif term.count(indepVar) == 1:
-        coefficient = ""
-        power = 0
-        if len(term) >= term.find(indepVar)+2:
-            if term[term.find(indepVar)+1] != "^":
-                if term[term.find(indepVar)+1].isdigit():
-                    term = term[0:term.find(indepVar)+1] + indepVar + "^1*" + term[term.find(indepVar)+1:len(term)]
-                    power = 1
-                    coefficient = term[0:term.find(indepVar)] + "*" + term[term.find(indepVar)+1+4:len(term)]
-                else:
-                    term = term[0:term.find(indepVar)+1] + indepVar + "^1" + term[term.find(indepVar)+1:len(term)]
-                    power = 1
-                    coefficient = term[0:term.find(indepVar)] + "*" + term[term.find(indepVar)+1+4:len(term)]
-            else:
-                coefficient = ""
-        else:
-            term = term + "^1"
-            power = 1
-            coefficient = term[0:term.find(indepVar)]
-        print(coefficient)
-        if coefficient != "":
-            if coefficient[0] == "+":
-                if len(coefficient) == 1:
-                    coefficient = 1
-                else:
-                    coefficient = coefficient[1:len(coefficient)]
-            print(coefficient)
-            coefficient = funcSolver(getOperandsAndTerms(coefficient)[0],getOperandsAndTerms(coefficient)[1])
-        else:
-            i = 0
-            index = 0
-            while i < 4 and index < len(term):
-                if term[i] == "x":
-                    i += 1
-                elif term[i] == "^" and i == 1:
-                    i += 1
-                elif term[i].isdigit() and i == 2:
-                    i += 1
-                elif term[i].isdigit() == False and i == 3:
-                    i += 1
-                
-                index += 1
-            if index != len(term) and index - 1 != len(term):
-                coefficient = term[0:term.find(indepVar)] + term[index - 1: len(term)]
-                coefficient = funcSolver(getOperandsAndTerms(coefficient)[0],getOperandsAndTerms(coefficient)[1])
-            else:
-                if term[len(term)-1].isdigit() and term[len(term)-2] != "^":
-                    coefficient = term[0:term.find(indepVar)] + "*" + term[len(term)-1]
-                else:
-                    coefficient = term[0:term.find(indepVar)]
-                coefficient = funcSolver(getOperandsAndTerms(coefficient)[0],getOperandsAndTerms(coefficient)[1])
-        if power == 0:
-            power = getOperandsAndTerms(term[term.find("^")+1:len(term)])[0]
-            power = power[0]
-        coefficient = str(coefficient) + "*" + str(power)
-        coefficient = funcSolver(getOperandsAndTerms(coefficient)[0],getOperandsAndTerms(coefficient)[1])
-        power = str(float(power) - 1)
-        if float(power) == 0.0:
-            return(str(coefficient))
-        else:
-            return(str(coefficient) + "*" + str(indepVar) + "^" + str(power))
-
-    else:
-        output = "0"
-        terms = getOperandsAndTerms(term)[0]
-        operands = getOperandsAndTerms(term)[1]
-        num = "" #Numerator
-        denom = "" #Denominator
-        num += terms[0]
-        if operands[0] == "/":
-            print("QUOTIENT")
-        elif operands[0] == "*":
-            print("PRODUCT")
-        elif operands[0] == "^":
-            print("POWER")
-        return(output)
-    #Quotient
-    #Product
-    #Power
-    #Trig
-    #Log
-    #Expo
-    #Constant
-
-
-
-
-
-
-
 
 def prenEliminator(terms, operands):
     newTerms = []
@@ -436,4 +485,5 @@ def funcSolver(terms, operands):
     ##print("solved:", final)
     return(final)
     
-print(derivativeHub("y = 2x^2*2 + x + 3x^2"))
+print(derivativeHub("y = x^2/x"))
+#print(expressionSplitter("x","2(x+1)^2"))
