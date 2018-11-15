@@ -365,15 +365,15 @@ def pluggerSetup(depVar, indepVar, equation):
     return output
 
 def derivative(function, start, end):
-    points=[]
-    dpoints=[]
-    d2points=[]
-    dpointsfull=[]
-    i=start
+    points=[] #list of points on the function
+    dpoints=[] #list of the derivatives of the function points, dy/dx
+    d2points=[] #list of the second derivatives of the function points, d(dy/dx)/dx
+    dpointsfull=[] #list of points with (x, dy/dx)
+    i=start 
     while i<=end:
         points.append(funcInterpreter("y","x",function,i))
         i+=1
-    #print(points)
+
     for i in range(0,len(points)):
         dpoints.append(round(((funcInterpreter("y","x",function,points[i][0]+0.000001)[1]-points[i][1])/.000001),4))
         dpoint=(points[i][0],round(((funcInterpreter("y","x",function,points[i][0]+0.000001)[1]-points[i][1])/.000001),4))
@@ -382,9 +382,6 @@ def derivative(function, start, end):
         d2=(funcInterpreter("y","x",function,points[i][0]+0.000002)[1]-funcInterpreter("y","x",function,points[i][0]+0.000001)[1])/.000001
         d2points.append(round(((d2-d1)/.000001),4))
     
-    print(dpoints)
-    print("full= " + str(dpointsfull))        
-    print(d2points)
     extremas=[]
     if funcInterpreter("y","x",function,start)[1]>funcInterpreter("y","x",function,start+.5)[1]:
         print("Local max at: " + str(points[0]))
@@ -418,12 +415,30 @@ def derivative(function, start, end):
                         if dpoints[i+2]>0:
                             print("Local min at: " + str(points[i+1]))
                             extremas.append(points[i+1])
+    maxabsolute=[]
     if len(extremas)>0:
         y=extremas[0]
-        for i in range(0,len(extremas)):
+        maxabsolute=[y]
+        for i in range(1,len(extremas)):
             if y[1]<extremas[i][1]:
                 y = extremas[i]
-                
+                maxabsolute=[extremas[i]]
+            elif y[1]==extremas[i][1]:
+                maxabsolute.append(extremas[i])
+    for i in maxabsolute:
+        print("Absolute max at: " + str(i))
+    minabsolute=[]
+    if len(extremas)>0:
+        y=extremas[0]
+        minabsolute=[y]
+        for i in range(1,len(extremas)):
+            if y[1]>extremas[i][1]:
+                y = extremas[i]
+                minabsolute=[y]
+            elif y[1]==extremas[i][1]:
+                minabsolute.append(y)
+    for i in minabsolute:
+        print("Absolute min at: " + str(i))            
             
     extremasort=[]
     for i in range(0,len(extremas)):
@@ -465,7 +480,6 @@ def derivative(function, start, end):
     for i in range(0,len(poi)):
         poisort.append(poi[i])
         poisort.sort()
-    #print(poisort)
     
     for i in range(0,len(poisort)):
         if len(poisort)>i+1:
