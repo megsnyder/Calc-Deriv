@@ -386,7 +386,7 @@ def derivative(function, start, end):
     
     extremas=[] #list of all the local extrema
     
-    #first do the endpoints of the function
+    #first checking the endpoints of the function for local extrema
     if funcInterpreter("y","x",function,start)[1]>funcInterpreter("y","x",function,start+.0001)[1]: #if the starting point is greater than a point very close to it, there is a local max there
         print("Local max at: " + str(points[0]))
         extremas.append(points[0]) #adds to the grand list of locals
@@ -399,34 +399,35 @@ def derivative(function, start, end):
     elif funcInterpreter("y","x",function,end)[1]<funcInterpreter("y","x",function,end-.0001)[1]:
         print("Local min at: " + str(points[len(points)-1]))
         extremas.append(points[len(points)-1])
-
-    for i in range(0,len(dpoints)):
-        if len(dpoints)>i+1:
-            if dpoints[i]>0:
-                if dpoints[i+1]<0:
+    
+    #next checking sign changes in the derivative
+    for i in range(0,len(dpoints)): #iterate through the list of derivatives
+        if len(dpoints)>i+1: #only runs if within the range of the loop
+            if dpoints[i]>0: 
+                if dpoints[i+1]<0: #if derivative is positive and then negative, there is a local max at approximately the average of the two x values
                     print("Local max at: " + str(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2)))
-                    extremas.append(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2))
-                elif dpoints[i+1]==0:
+                    extremas.append(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2)) #adds to the grand list
+                elif dpoints[i+1]==0: #if our point of the derivative equals exactly zero between a sign change, we do not have to average but instead use the exact point
                     if len(dpoints)>i+2:
                         if dpoints[i+2]<0:
                             print("Local max at: " + str(points[i+1]))
                             extremas.append(points[i+1])
-            if dpoints[i]<0:
+            if dpoints[i]<0: #if derivative is negative and then positve, there is a local min at approximately the average of the two x values
                 if dpoints[i+1]>0:
                     print("Local min at: " + str(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2)))
                     extremas.append(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2))
-                elif dpoints[i+1]==0:
+                elif dpoints[i+1]==0: #again if we have a point at exactly zero, we use that point instead of the average
                     if len(dpoints)>i+2:
                         if dpoints[i+2]>0:
                             print("Local min at: " + str(points[i+1]))
                             extremas.append(points[i+1])
                             
-    maxabsolute=[]
-    if len(extremas)>0:
-        y=extremas[0]
-        maxabsolute=[y]
-        for i in range(1,len(extremas)):
-            if y[1]<extremas[i][1]:
+    maxabsolute=[] #list of absolute maxes
+    if len(extremas)>0: #if any extremas exist, (which they have to), then we check what the biggest one is
+        y=extremas[0] #the first point in the list of extremas, what we use to compare to the rest
+        maxabsolute=[y] #add to the list of extremas
+        for i in range(1,len(extremas)): #run through the list of local extrema
+            if y[1]<extremas[i][1]: #if one of the extremas is bigger than the first, this changes the variable y to the bigger one
                 y = extremas[i]
                 maxabsolute=[extremas[i]]
             elif y[1]==extremas[i][1]:
