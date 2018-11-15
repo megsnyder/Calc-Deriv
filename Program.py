@@ -1,22 +1,3 @@
-def extrema(equation, interval):
-    incr = []
-    decr = []
-    zeroes = []
-    status = 0
-    #print(list(range(interval[0],interval[1]+1)))
-    for i in range(interval[0],interval[1]+1):
-        expression = getOperandsAndTerms(equation.format(i))
-        if prenEliminator(expression[0],expression[1]) == 0:
-            zeroes.append(i)
-            status = 0
-        #elif prenEliminator(expression[0],expression[1]) > 0:
-        #    incr.append(i)
-        #elif prenEliminator(expression[0],expression[1]) < 0:
-        #    decr.append(i)
-    #print("Increasing:", incr)
-    #print("Decreasing:", decr)
-    print("Zeroes:", zeroes)
-    
 def funcInterpreter(depVar, indepVar, equation,t):
     if equation.count("(") != equation.count(")") or equation.count("=") != 1:
         print("Invalid input given")
@@ -44,7 +25,7 @@ def funcInterpreter(depVar, indepVar, equation,t):
         #points = "nil"
         
         return(points)
-      
+  
 def prenEliminator(terms, operands):
     newTerms = []
     operators = []
@@ -383,16 +364,11 @@ def pluggerSetup(depVar, indepVar, equation):
         #print(output)
     return output
 
-def derivative(equation, interval):
-    if equation.find("=") != -1:
-        equation = equation[equation.find("=")+1:len(equation)]
+def derivative(function, start, end):
     points=[]
     dpoints=[]
     d2points=[]
     dpointsfull=[]
-    function=input("Function: ")
-    start=float(input("Start: "))
-    end=float(input("End: "))
     i=start
     while i<=end:
         points.append(funcInterpreter("y","x",function,i))
@@ -498,12 +474,9 @@ def derivative(equation, interval):
             if poisort[i][1]>poisort[i+1][1]:
                 print("Concave down on interval: (" + str(poisort[i][0]) + ", " + str(poisort[i+1][0]) + ")")
     
-            
-    '''
-    Integrate: -, parenthesis, and operators
-    '''
-    final = pluggerSetup("y", "x", equation)
-    print(final)
-    extrema(final, interval)
 
-derivative("y=100-x^2", [-100,100])
+
+function=input("Function: ")
+start=float(input("Start: "))
+end=float(input("End: "))
+derivative(function, start, end)
