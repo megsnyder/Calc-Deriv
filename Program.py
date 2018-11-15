@@ -378,13 +378,13 @@ def derivative(function, start, end):
         dpoints.append(round(((funcInterpreter("y","x",function,points[i][0]+0.000001)[1]-points[i][1])/.000001),4))
         dpoint=(points[i][0],round(((funcInterpreter("y","x",function,points[i][0]+0.000001)[1]-points[i][1])/.000001),4))
         dpointsfull.append(dpoint)
-    #print(dpoints)
-    #print("full= " + str(dpointsfull))
-    for i in range(0,len(dpoints)):
-        if len(dpoints)>i+1:
-            d2points.append(round(((dpoints[i+1]-dpoints[i])/(points[i+1][0]-points[i][0])),4))
-        
-    #print(d2points)
+        d1=(funcInterpreter("y","x",function,points[i][0]+0.000001)[1]-points[i][1])/.000001
+        d2=(funcInterpreter("y","x",function,points[i][0]+0.000002)[1]-funcInterpreter("y","x",function,points[i][0]+0.000001)[1])/.000001
+        d2points.append(round(((d2-d1)/.000001),4))
+    
+    print(dpoints)
+    print("full= " + str(dpointsfull))        
+    print(d2points)
     extremas=[]
     if funcInterpreter("y","x",function,start)[1]>funcInterpreter("y","x",function,start+.5)[1]:
         print("Local max at: " + str(points[0]))
