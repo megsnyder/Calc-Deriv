@@ -407,7 +407,7 @@ def derivative(function, start, end):
                 if dpoints[i+1]<0: #if derivative is positive and then negative, there is a local max at approximately the average of the two x values
                     print("Local max at: " + str(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2)))
                     extremas.append(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2)) #adds to the grand list
-                elif dpoints[i+1]==0: #if our point of the derivative equals exactly zero between a sign change, we do not have to average but instead use the exact point
+                elif dpoints[i+1]==0: #detects a sign change if there is a zero in between, and adds the extrema
                     if len(dpoints)>i+2:
                         if dpoints[i+2]<0:
                             print("Local max at: " + str(points[i+1]))
@@ -416,7 +416,7 @@ def derivative(function, start, end):
                 if dpoints[i+1]>0:
                     print("Local min at: " + str(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2)))
                     extremas.append(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2))
-                elif dpoints[i+1]==0: #again if we have a point at exactly zero, we use that point instead of the average
+                elif dpoints[i+1]==0: #detects a sign change if there is a zero in between, and adds the extrema
                     if len(dpoints)>i+2:
                         if dpoints[i+2]>0:
                             print("Local min at: " + str(points[i+1]))
@@ -463,37 +463,39 @@ def derivative(function, start, end):
                 
     poi=[dpointsfull[0],dpointsfull[len(dpointsfull)-1]] #list of points of inflection with endpoints added. although these endpoints aren't points of inflection (we don't print them), using endpoints allows us to check for concavity, even if no points of inflection are present within the interval
         
-    for i in range(0,len(d2points)):
-        if len(d2points)>i+1:
+    #checks for sign changes in the second derivative
+    for i in range(0,len(d2points)): #runs through the list of derivatives
+        if len(d2points)>i+1: #checks if loop is in range
             if d2points[i]>0:
-                if d2points[i+1]<0:
+                if d2points[i+1]<0: #if second derivative is positive, then negative, there is a point of inflection at about the average of x values of those two points
                     print("Point of inflection at: " + str(funcInterpreter("y","x",function,(dpointsfull[i][0]+dpointsfull[i+1][0])/2)))
-                    poi.append(funcInterpreter("y","x",function,(dpointsfull[i][0]+dpointsfull[i+1][0])/2))
-                elif d2points[i+1]==0:
+                    poi.append(funcInterpreter("y","x",function,(dpointsfull[i][0]+dpointsfull[i+1][0])/2)) #add points of inflection to the grand list
+                elif d2points[i+1]==0: #detects a sign change if there is a zero in between, and adds the point of inflection
                     if len(d2points)>i+2:
                         if d2points[i+2]<0:
                             print("Point of inflection at: " + str(dpointsfull[i+1]))
                             poi.append(dpointsfull[i+1])
-            if d2points[i]<0:
+            if d2points[i]<0: #if second derivative is negative, then positive, there is a point of inflection at about the average of x values of those two points
                 if d2points[i+1]>0:
                     print("Point of inflection at: " + str(funcInterpreter("y","x",function,(dpointsfull[i][0]+dpointsfull[i+1][0])/2)))
-                    poi.append(funcInterpreter("y","x",function,(dpointsfull[i][0]+dpointsfull[i+1][0])/2))
-                elif d2points[i+1]==0:
+                    poi.append(funcInterpreter("y","x",function,(dpointsfull[i][0]+dpointsfull[i+1][0])/2)) #add points of inflection to the grand list
+                elif d2points[i+1]==0: #detects a sign change if there is a zero in between, and adds the point of inflection
                     if len(d2points)>i+2:
                         if d2points[i+2]>0:
                             print("Point of inflection at: " + str(dpointsfull[i+1]))
                             poi.append(dpointsfull[i+1])
             
-    poisort=[]
-    for i in range(0,len(poi)):
+    poisort=[] #list of points of inflection sorted by x values
+    for i in range(0,len(poi)): #runs through the points of inflection and adds them in order
         poisort.append(poi[i])
         poisort.sort()
     
-    for i in range(0,len(poisort)):
-        if len(poisort)>i+1:
-            if poisort[i][1]<poisort[i+1][1]:
+    #comparing the points of inflection in the same way we compared extrema allows us to determine concave up/down (why we added endpoints to the list of points of inflection)
+    for i in range(0,len(poisort)): #runs through the sorted points of inflection
+        if len(poisort)>i+1: #makes sure loop range isn't exceeded
+            if poisort[i][1]<poisort[i+1][1]: #if point of inflection or endpoint is smaller than the next point of inflection, the function is concave up between them, open brackets
                 print("Concave up on interval: (" + str(poisort[i][0]) + ", " + str(poisort[i+1][0]) + ")")
-            if poisort[i][1]>poisort[i+1][1]:
+            if poisort[i][1]>poisort[i+1][1]: #if point of inflection or endpoint is bigger than the next point of inflection, the function is concave down between them, open brackets
                 print("Concave down on interval: (" + str(poisort[i][0]) + ", " + str(poisort[i+1][0]) + ")")
     
 
