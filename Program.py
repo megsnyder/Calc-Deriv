@@ -453,14 +453,15 @@ def derivative(function, start, end):
         extremasort.append(extremas[i]) #adds the extremas
         extremasort.sort() #sorts the extremas by x value
     
-    for i in range(0,len(extremasort)):
-        if len(extremasort)>i+1:
-            if extremasort[i][1]<extremasort[i+1][1]:
-                print("Increasing on interval: [" + str(extremasort[i][0]) + ", " + str(extremasort[i+1][0]) + "]")
-            if extremasort[i][1]>extremasort[i+1][1]:
-                print("Decreasing on interval: [" + str(extremasort[i][0]) + ", " + str(extremasort[i+1][0]) + "]")
+    #we compare extrema to figure out whether the function is increasing or decreasing between them
+    for i in range(0,len(extremasort)): #runs through the list of extremas sorted by x value
+        if len(extremasort)>i+1: #makes sures the loop is in range
+            if extremasort[i][1]<extremasort[i+1][1]: #if the y value of the extrema is smaller than the y value of the next extrema, the graph is increasing
+                print("Increasing on interval: [" + str(extremasort[i][0]) + ", " + str(extremasort[i+1][0]) + "]") #print the two extremas with closed brackets
+            if extremasort[i][1]>extremasort[i+1][1]: #if the y value of the extrema is larger than the y value of the next extrema, the graph is decreasing
+                print("Decreasing on interval: [" + str(extremasort[i][0]) + ", " + str(extremasort[i+1][0]) + "]") #print the two extremas with closed brackets
                 
-    poi=[dpointsfull[0],dpointsfull[len(dpointsfull)-1]]
+    poi=[dpointsfull[0],dpointsfull[len(dpointsfull)-1]] #list of points of inflection with endpoints added. although these endpoints aren't points of inflection (we don't print them), using endpoints allows us to check for concavity, even if no points of inflection are present within the interval
         
     for i in range(0,len(d2points)):
         if len(d2points)>i+1:
