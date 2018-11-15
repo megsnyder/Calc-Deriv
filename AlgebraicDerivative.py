@@ -124,7 +124,7 @@ def deriv(indepVar, term):
     else:
         output = "0"
         if term[0] == "+":
-            term = term[1:len(term)]
+            term = "-", term[1:len(term)]
         terms = getOperandsAndTerms(term)[0]
         operands = getOperandsAndTerms(term)[1]
         #print(terms,operands)
@@ -485,5 +485,5 @@ def funcSolver(terms, operands):
     ##print("solved:", final)
     return(final)
     
-print(derivativeHub("y = x^2/x"))
+print(derivativeHub("y = x/x"))
 #print(expressionSplitter("x","2(x+1)^2"))
