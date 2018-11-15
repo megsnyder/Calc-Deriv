@@ -208,6 +208,10 @@ def getOperandsAndTerms(equation):
     if term != "":
         terms.append(term)
     #print("GottenTerms", terms, "GottenOperands", operands, "from", equation)
+    for i in range(0,len(terms)):
+        #print(terms[i])
+        if terms[i] == "-":
+            terms[i] = "-1"
     return((terms,operands))
     
 def funcSolver(terms, operands):
@@ -341,7 +345,6 @@ def funcPlugger(depVar, indepVar, equation, t):
     a = getOperandsAndTerms(equation.format(t))
     b = prenEliminator(a[0],a[1])
     c = 0
-    #print("Wubbo", equation.format(t),a,b)
     if isinstance(b, (list,)):
         #print(b)
         for i in b:
