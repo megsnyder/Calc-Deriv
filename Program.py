@@ -435,17 +435,17 @@ def derivative(function, start, end):
     for i in maxabsolute: #prints out all the absolute maxes
         print("Absolute max at: " + str(i))
         
-    minabsolute=[]
-    if len(extremas)>0:
-        y=extremas[0]
+    minabsolute=[] #list of absolute mins
+    if len(extremas)>0: #the same as the maxes, only run if extremas exist
+        y=extremas[0] #use the first point in extremas
         minabsolute=[y]
         for i in range(1,len(extremas)):
-            if y[1]>extremas[i][1]:
+            if y[1]>extremas[i][1]: #if the extrema is smaller than the previous, change the variable to that extrema and add it to the list of minima
                 y = extremas[i]
                 minabsolute=[y]
-            elif y[1]==extremas[i][1]:
+            elif y[1]==extremas[i][1]: #if they are equally small, keep both the lise
                 minabsolute.append(y)
-    for i in minabsolute:
+    for i in minabsolute: #print out the minima
         print("Absolute min at: " + str(i))            
             
     extremasort=[]
