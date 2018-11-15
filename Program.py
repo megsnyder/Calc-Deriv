@@ -448,10 +448,10 @@ def derivative(function, start, end):
     for i in minabsolute: #print out the minima
         print("Absolute min at: " + str(i))            
             
-    extremasort=[]
-    for i in range(0,len(extremas)):
-        extremasort.append(extremas[i])
-        extremasort.sort()
+    extremasort=[] #the list of extremas sorted by their x value
+    for i in range(0,len(extremas)): #runs through the list of extremas
+        extremasort.append(extremas[i]) #adds the extremas
+        extremasort.sort() #sorts the extremas by x value
     
     for i in range(0,len(extremasort)):
         if len(extremasort)>i+1:
