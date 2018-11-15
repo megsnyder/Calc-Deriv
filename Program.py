@@ -375,8 +375,8 @@ def derivative(function, start, end):
         i+=1
     #print(points)
     for i in range(0,len(points)):
-        dpoints.append(round(((funcInterpreter("y","x",function,points[i][0]+0.00001)[1]-points[i][1])/.00001),4))
-        dpoint=(points[i][0],round(((funcInterpreter("y","x",function,points[i][0]+0.00001)[1]-points[i][1])/.00001),4))
+        dpoints.append(round(((funcInterpreter("y","x",function,points[i][0]+0.000001)[1]-points[i][1])/.000001),4))
+        dpoint=(points[i][0],round(((funcInterpreter("y","x",function,points[i][0]+0.000001)[1]-points[i][1])/.000001),4))
         dpointsfull.append(dpoint)
     #print(dpoints)
     #print("full= " + str(dpointsfull))
@@ -444,7 +444,7 @@ def derivative(function, start, end):
         if len(d2points)>i+1:
             if d2points[i]>0:
                 if d2points[i+1]<0:
-                    print("Point of inflection at: " + str("y","x",function,(dpointsfull[i][0]+dpointsfull[i+1][0])/2))
+                    print("Point of inflection at: " + str(funcInterpreter("y","x",function,(dpointsfull[i][0]+dpointsfull[i+1][0])/2)))
                     poi.append(funcInterpreter("y","x",function,(dpointsfull[i][0]+dpointsfull[i+1][0])/2))
                 elif d2points[i+1]==0:
                     if len(d2points)>i+2:
