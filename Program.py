@@ -270,6 +270,11 @@ def funcSolver(terms, operands):
                     #print("The equation you entered was weird. Maybe you should check it.")
         else:
             newTerms.append(i)
+    for i in newTerms:
+        if str(i).find("e") != -1:
+            newTerms[i]=str(newTerms[i])
+            newTerms[i] = str(round(funcSolver([newTerms[i][0:newTerms[i].find("e")],"10", newTerms[i][newTerms[i].find("e")+1:len(newTerms[i])]],["*","^"]),5))
+            print("NEWTI", newTerms[i])
     terms = newTerms
     final = 0
     holder = ""
@@ -316,6 +321,7 @@ def funcSolver(terms, operands):
                 if k.isdigit() == True or k == "." or k == "-":
                     final += str(k)
         print(final)
+        print(terms, operands)
         final = float(final)
     ##print("solved:", final)
     return(final)
