@@ -198,9 +198,27 @@ def getOperandsAndTerms(equation):
     
 def funcSolver(terms, operands):
     letterOperands = "sincotaelg"
-    #print("funcSolverCalled")
-    #print("terms:", terms)
-    #print("operands:", operands)
+    print("funcSolverCalled")
+    print("terms:", terms)
+    print("operands:", operands)
+    for i in range(0,len(terms)):
+        print("E?", terms[i])
+        if str(terms[i]).find("e") != -1:
+            print("EEE")
+            print("RESOLVING E", terms[i])
+            if getOperandsAndTerms(terms[i])[1] == []:
+                firstdig = 0
+                for k in range(0,len(terms[i])):
+                    print(terms[i][k], firstdig)
+                    if firstdig == 0 and (terms[i][k]).isdigit():
+                        firstdig = k
+                print("WHY", terms[i][firstdig])
+                terms[i] = terms[i][firstdig:len(terms[i])]
+                if terms[i][len(terms[i])-1] == ")":
+                    terms[i] = terms[i][0:len(terms)-1]
+            print("EEEE", terms[i])
+            terms[i] = str(round(funcSolver([terms[i][0:terms[i].find("e")],"10", terms[i][terms[i].find("e")+1:len(terms[i])]],["*","^"]),10))
+            print("RESOLVED E", terms[i])
     newTerms = []
     for i in terms:
         status = 0
@@ -271,11 +289,11 @@ def funcSolver(terms, operands):
         else:
             newTerms.append(i)
     
-    for i in newTerms:
-        if str(i).find("e") != -1:
+    for i in range(0,len(newTerms)):
+        if str(newTerms[i]).find("e") != -1:
+            print("NEWTERMS", newTerms, terms, operands)
             newTerms[i]=str(newTerms[i])
             newTerms[i] = str(round(funcSolver([newTerms[i][0:newTerms[i].find("e")],"10", newTerms[i][newTerms[i].find("e")+1:len(newTerms[i])]],["*","^"]),10))
-    
     terms = newTerms
     final = 0
     holder = ""
@@ -381,7 +399,7 @@ def derivative(function, start, end):
     
     while i<=end: #runs through interval from start to end, adds points on the function
         points.append(funcInterpreter("y","x",function,i))
-        i+=1
+        i+=0.1
 
     for i in range(0,len(points)): #adds points to derivate and second derivative
         dpoints.append(round(((funcInterpreter("y","x",function,points[i][0]+0.000001)[1]-points[i][1])/.000001),4)) #first derivative using limit definition and substituting .000001 in for h, rounded to 4 decimals
@@ -508,7 +526,10 @@ def derivative(function, start, end):
                 print("Concave down on interval: (" + str(poisort[i][0]) + ", " + str(poisort[i+1][0]) + ")")
     
 
-function=input("Function: ") #input the function
-start=float(input("Start: ")) #input the start of the interval 
-end=float(input("End: ")) #input the end of the interval
+#function=input("Function: ") #input the function
+#start=float(input("Start: ")) #input the start of the interval 
+#end=float(input("End: ")) #input the end of the interval
+function = "y=sin(x)"
+start = float("-2")
+end = float("2")
 derivative(function, start, end) #calls the derivative function
