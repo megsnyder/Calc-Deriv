@@ -1,3 +1,4 @@
+from math import log, sin, cos, tan
 def funcInterpreter(depVar, indepVar, equation,t):
     if equation.count("(") != equation.count(")") or equation.count("=") != 1:
         print("Invalid input given")
@@ -252,7 +253,6 @@ def funcSolver(terms, operands):
                 if len(inside) > 0:
                     term = term + str(prenEliminator(getOperandsAndTerms(inside)[0],getOperandsAndTerms(inside)[1]))
                 #print(term)
-                #print(i[0:3], term[0:3])
                 if term[0:3] == "sin":
                     newTerms.append(sin(float(term[3:len(term)])))
                 elif term[0:3] == "cos":
@@ -315,8 +315,11 @@ def funcSolver(terms, operands):
             for k in i:
                 if k.isdigit() == True or k == "." or k == "-":
                     final += str(k)
-        #print(final)
-        final = float(final)
+        print(final)
+        if len(getOperandsAndTerms(final)[0])!=0:
+            final = funcSolver(getOperandsAndTerms(final)[0],getOperandsAndTerms(final)[1])
+        else:
+            final = float(final)
     ##print("solved:", final)
     return(final)
 
@@ -500,7 +503,6 @@ def derivative(function, start, end):
             if d1>d2: #if the derivative at the point of inflection or endpoint is bigger than the next point of inflection, the function is concave down between them, open brackets
                 print("Concave down on interval: (" + str(poisort[i][0]) + ", " + str(poisort[i+1][0]) + ")")
     
-
 
 function=input("Function: ") #input the function
 start=float(input("Start: ")) #input the start of the interval 
