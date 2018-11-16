@@ -275,7 +275,6 @@ def funcSolver(terms, operands):
         if str(i).find("e") != -1:
             newTerms[i]=str(newTerms[i])
             newTerms[i] = str(round(funcSolver([newTerms[i][0:newTerms[i].find("e")],"10", newTerms[i][newTerms[i].find("e")+1:len(newTerms[i])]],["*","^"]),10))
-            print("NEWTI", newTerms[i])
     
     terms = newTerms
     final = 0
