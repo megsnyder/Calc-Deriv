@@ -316,10 +316,7 @@ def funcSolver(terms, operands):
                 if k.isdigit() == True or k == "." or k == "-":
                     final += str(k)
         print(final)
-        if len(getOperandsAndTerms(final)[0])!=0:
-            final = funcSolver(getOperandsAndTerms(final)[0],getOperandsAndTerms(final)[1])
-        else:
-            final = float(final)
+        final = float(final)
     ##print("solved:", final)
     return(final)
 
