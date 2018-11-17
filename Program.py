@@ -257,15 +257,15 @@ def funcSolver(terms, operands):
                 if term[0:3] == "sin":
                     newTerms.append(round(sin(float(term[3:len(term)])),5))
                 elif term[0:3] == "cos":
-                    newTerms.append(round(cos(float(term[3:len(term)]))),5)
+                    newTerms.append(round(cos(float(term[3:len(term)])),5))
                 elif term[0:3] == "tan":
-                    newTerms.append(round(tan(float(term[3:len(term)]))),5)
+                    newTerms.append(round(tan(float(term[3:len(term)])),5))
                 elif term[0:3] == "sec":
-                    newTerms.append(round(1/cos(float(term[3:len(term)]))),5)
+                    newTerms.append(round(1/cos(float(term[3:len(term)])),5))
                 elif term[0:3] == "csc":
-                    newTerms.append(round(1/sin(float(term[3:len(term)]))),5)
+                    newTerms.append(round(1/sin(float(term[3:len(term)])),5))
                 elif term[0:3] == "cot":
-                    newTerms.append(round(1/tan(float(term[3:len(term)]))),5)
+                    newTerms.append(round(1/tan(float(term[3:len(term)])),5))
                 else:
                     newTerms.append(i)
                     #print("The equation you entered was weird. Maybe you should check it.")
@@ -327,6 +327,7 @@ def funcPlugger(depVar, indepVar, equation, t):
     a = getOperandsAndTerms(equation.format(t))
     b = prenEliminator(a[0],a[1])
     c = 0
+    #print("Wubbo", equation.format(t),a,b)
     if isinstance(b, (list,)):
         #print(b)
         for i in b:
@@ -375,28 +376,28 @@ def derivative(function, start, end):
     while i<=end: #runs through interval from start to end, adds points on the function
         points.append(funcInterpreter("y","x",function,round(i,5)))
         i+=0.1
-
-    for i in range(0,len(points)): #adds points to derivate and second derivative
-        dpoints.append(round(((funcInterpreter("y","x",function,points[i][0]+0.000001)[1]-points[i][1])/.000001),4)) #first derivative using limit definition and substituting .000001 in for h, rounded to 4 decimals
-        dpoint=(points[i][0],round(((funcInterpreter("y","x",function,points[i][0]+0.000001)[1]-points[i][1])/.000001),4)) #(x, first derivative)
-        dpointsfull.append(dpoint) #adds the full points of derivative to the list
-        d1=(funcInterpreter("y","x",function,points[i][0]+0.000001)[1]-points[i][1])/.000001 #again derivative substituting .000001 in for h
-        d2=(funcInterpreter("y","x",function,points[i][0]+0.000002)[1]-funcInterpreter("y","x",function,points[i][0]+0.000001)[1])/.000001 #first derivative using the x value of the previous line (ends up .000002 away from original point)
-        d2points.append(round(((d2-d1)/.000001),4)) #adds to the list of second derivatives the slope between the two first derivatives found
     
+    degreeofprecision = 0.0001 #We find the numerical derivative by using very small secant lines (this is the distance in the x direction of the points we create the secant line with)
+    for i in range(0,len(points)): #adds points to derivate and second derivative
+        dpoints.append(round(((funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1]-points[i][1])/degreeofprecision),4)) #first derivative using limit definition and substituting .000001 in for h, rounded to 4 decimals
+        dpoint=(points[i][0],round(((funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1]-points[i][1])/degreeofprecision),4)) #(x, first derivative)
+        dpointsfull.append(dpoint) #adds the full points of derivative to the list
+        d1=(funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1]-points[i][1])/degreeofprecision #again derivative substituting .000001 in for h
+        d2=(funcInterpreter("y","x",function,points[i][0]+degreeofprecision*2)[1]-funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1])/degreeofprecision #first derivative using the x value of the previous line (ends up .000002 away from original point)
+        d2points.append(round(((d2-d1)/degreeofprecision),4)) #adds to the list of second derivatives the slope between the two first derivatives found
     extremas=[] #list of all the local extrema
     
     #first checking the endpoints of the function for local extrema
-    if funcInterpreter("y","x",function,start)[1]>funcInterpreter("y","x",function,start+.0001)[1]: #if the starting point is greater than a point very close to it, there is a local max there
+    if funcInterpreter("y","x",function,start)[1]>funcInterpreter("y","x",function,start+degreeofprecision)[1]: #if the starting point is greater than a point very close to it, there is a local max there
         print("Local max at: " + str(points[0]))
         extremas.append(points[0]) #adds to the grand list of locals
-    elif funcInterpreter("y","x",function,start)[1]<funcInterpreter("y","x",function,start+.0001)[1]: #if the starting point is smaller than a point very close to it, local min
+    elif funcInterpreter("y","x",function,start)[1]<funcInterpreter("y","x",function,start+degreeofprecision)[1]: #if the starting point is smaller than a point very close to it, local min
         print("Local min at: " + str(points[0]))
         extremas.append(points[0])
-    if funcInterpreter("y","x",function,end)[1]>funcInterpreter("y","x",function,end-.0001)[1]: #do the same for the end point
+    if funcInterpreter("y","x",function,end)[1]>funcInterpreter("y","x",function,end-degreeofprecision)[1]: #do the same for the end point
         print("Local max at: " + str(points[len(points)-1]))
         extremas.append(points[len(points)-1])
-    elif funcInterpreter("y","x",function,end)[1]<funcInterpreter("y","x",function,end-.0001)[1]:
+    elif funcInterpreter("y","x",function,end)[1]<funcInterpreter("y","x",function,end-degreeofprecision)[1]:
         print("Local min at: " + str(points[len(points)-1]))
         extremas.append(points[len(points)-1])
     
