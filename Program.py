@@ -198,27 +198,9 @@ def getOperandsAndTerms(equation):
     
 def funcSolver(terms, operands):
     letterOperands = "sincotaelg"
-    print("funcSolverCalled")
-    print("terms:", terms)
-    print("operands:", operands)
-    for i in range(0,len(terms)):
-        print("E?", terms[i])
-        if str(terms[i]).find("e") != -1:
-            print("EEE")
-            print("RESOLVING E", terms[i])
-            if getOperandsAndTerms(terms[i])[1] == []:
-                firstdig = 0
-                for k in range(0,len(terms[i])):
-                    print(terms[i][k], firstdig)
-                    if firstdig == 0 and (terms[i][k]).isdigit():
-                        firstdig = k
-                print("WHY", terms[i][firstdig])
-                terms[i] = terms[i][firstdig:len(terms[i])]
-                if terms[i][len(terms[i])-1] == ")":
-                    terms[i] = terms[i][0:len(terms)-1]
-            print("EEEE", terms[i])
-            terms[i] = str(round(funcSolver([terms[i][0:terms[i].find("e")],"10", terms[i][terms[i].find("e")+1:len(terms[i])]],["*","^"]),10))
-            print("RESOLVED E", terms[i])
+    #print("funcSolverCalled")
+    #print("terms:", terms)
+    #print("operands:", operands)
     newTerms = []
     for i in terms:
         status = 0
@@ -234,13 +216,13 @@ def funcSolver(terms, operands):
                 inside = i[i.find("(")+1:i.find(")")]
                 term = i[0:i.find("(")]
             else:
-                #term = i[i.find("(")+1:len(i)]
+                term = i
                 inside = ""
                 status = 0 
-                for i in term:
-                    if term.isdigit() == False and status == 0:
+                for k in term:
+                    if k.isdigit() and status == 0:
                         #THIS NEEDS TO CHANGE FOR NESTED COMPLEX OPERANDS
-                        inside += i
+                        inside += k
                     else:
                         status += 1
                     if status == 1:
@@ -260,7 +242,7 @@ def funcSolver(terms, operands):
                 else:
                     if len(inside) > 1:
                         inside = prenEliminator(getOperandsAndTerms(inside)[0],getOperandsAndTerms(inside)[1])
-                    newTerms.append(log(float(inside))/log(10))
+                    newTerms.append(round(log(float(inside))/log(10),5))
                 #print("logBase", logBase, "expression", expression)
 
                 #print("Term", term, float(term[3:len(term)]), log(float(term[3:len(term)])))
@@ -271,29 +253,24 @@ def funcSolver(terms, operands):
                 if len(inside) > 0:
                     term = term + str(prenEliminator(getOperandsAndTerms(inside)[0],getOperandsAndTerms(inside)[1]))
                 #print(term)
+                #print(i[0:3], term[0:3])
                 if term[0:3] == "sin":
-                    newTerms.append(sin(float(term[3:len(term)])))
+                    newTerms.append(round(sin(float(term[3:len(term)])),5))
                 elif term[0:3] == "cos":
-                    newTerms.append(cos(float(term[3:len(term)])))
+                    newTerms.append(round(cos(float(term[3:len(term)]))),5)
                 elif term[0:3] == "tan":
-                    newTerms.append(tan(float(term[3:len(term)])))
+                    newTerms.append(round(tan(float(term[3:len(term)]))),5)
                 elif term[0:3] == "sec":
-                    newTerms.append(1/cos(float(term[3:len(term)])))
+                    newTerms.append(round(1/cos(float(term[3:len(term)]))),5)
                 elif term[0:3] == "csc":
-                    newTerms.append(1/sin(float(term[3:len(term)])))
+                    newTerms.append(round(1/sin(float(term[3:len(term)]))),5)
                 elif term[0:3] == "cot":
-                    newTerms.append(1/tan(float(term[3:len(term)])))
+                    newTerms.append(round(1/tan(float(term[3:len(term)]))),5)
                 else:
                     newTerms.append(i)
                     #print("The equation you entered was weird. Maybe you should check it.")
         else:
             newTerms.append(i)
-    
-    for i in range(0,len(newTerms)):
-        if str(newTerms[i]).find("e") != -1:
-            print("NEWTERMS", newTerms, terms, operands)
-            newTerms[i]=str(newTerms[i])
-            newTerms[i] = str(round(funcSolver([newTerms[i][0:newTerms[i].find("e")],"10", newTerms[i][newTerms[i].find("e")+1:len(newTerms[i])]],["*","^"]),10))
     terms = newTerms
     final = 0
     holder = ""
@@ -339,8 +316,7 @@ def funcSolver(terms, operands):
             for k in i:
                 if k.isdigit() == True or k == "." or k == "-":
                     final += str(k)
-        #print(final)
-        #print(terms, operands)
+        #print("FINAL:",final)
         final = float(final)
     ##print("solved:", final)
     return(final)
@@ -351,7 +327,6 @@ def funcPlugger(depVar, indepVar, equation, t):
     a = getOperandsAndTerms(equation.format(t))
     b = prenEliminator(a[0],a[1])
     c = 0
-    #print("Wubbo", equation.format(t),a,b)
     if isinstance(b, (list,)):
         #print(b)
         for i in b:
@@ -398,7 +373,7 @@ def derivative(function, start, end):
     i=start #start of the interval
     
     while i<=end: #runs through interval from start to end, adds points on the function
-        points.append(funcInterpreter("y","x",function,i))
+        points.append(funcInterpreter("y","x",function,round(i,5)))
         i+=0.1
 
     for i in range(0,len(points)): #adds points to derivate and second derivative
@@ -530,6 +505,6 @@ def derivative(function, start, end):
 #start=float(input("Start: ")) #input the start of the interval 
 #end=float(input("End: ")) #input the end of the interval
 function = "y=sin(x)"
-start = float("-2")
-end = float("2")
+start = float("-10")
+end = float("10")
 derivative(function, start, end) #calls the derivative function
