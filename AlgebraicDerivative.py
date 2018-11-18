@@ -456,7 +456,7 @@ def product(terms):
 
 def quotient(num,denom):
     print("NUMDENOM", num, denom)
-    final = "(" + denom + "*" + "(" + derivHub("x",denom) +")" + "-"  + num + "*" "(" + derivHub("x",denom) + ")" + ")" + "/" + "("+"("+ denom + ")" + "^2" +")"
+    final = "(" + denom + "*" + "(" + derivHub("x",num) +")" + "-"  + num + "*" "(" + derivHub("x",denom) + ")" + ")" + "/" + "("+"("+ denom + ")" + "^2" +")"
     print("final:", final)
     return(final)
 
