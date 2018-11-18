@@ -1,317 +1,12 @@
-def derivativeHub(equation):
-    print("Finding Derivative of: ", equation)
-    expression = ""
-    for i in equation[equation.find("=")+1:len(equation)]:
-        if i != " ":
-            expression += i
-    derivFinal = ""
-    for varTerm in expressionSplitter("x", expression):
-        derivFinal += str(deriv("x", varTerm)) + "+"
-    derivFinal = derivFinal[0:len(derivFinal)-1]
-    return derivFinal
-    
-def expressionSplitter(indepVar, expression):
-    if expression.find(indepVar) == -1:
-        #print("IndepVars not found", expression)
-        return([expression])
-    else:
-        terms = []
-        term = ""
-        p = 0
-        for i in expression:
-            term += i
-            if i == "(":
-                p += 1
-            elif i == ")":
-                p -= 1
-            if (i == "+" or i == "-") and p == 0:
-                if len(term) > 1:
-                    if term[len(term)-2].isdigit() or term[len(term)-2] == indepVar or term[len(term)-2] == ")":
-                        terms.append(term[0:len(term)-1])
-                        term = i
-                        
-                if len(term) == 2:
-                    if term == "+":
-                        if i == "-":
-                            term = "-"
-                        else:
-                            print("Something Went Wrong :(")
-                    elif term[len(term)-2] == "-":
-                        if i == "-":
-                            term = "+"
-                        elif i == "+":
-                            term = "-"
-        
-        if term != "":
-            if term[0] != "+" and term[0] != "-":
-                terms.append("+" + term)
-            else:
-                terms.append(term)
-        
-        #print("IndepVars found", terms)
-        return(terms)
+from math import sin, cos, tan, log
 
-def deriv(indepVar, term):
-    #print("DERIV WITH TERM:",term)
-    if term.find(indepVar) == -1:
-        return("0")
-    elif term.count(indepVar) == 1 and term.count("(") == 0:
-        coefficient = ""
-        power = 0
-        if len(term) >= term.find(indepVar)+2:
-            if term[term.find(indepVar)+1] != "^":
-                if term[term.find(indepVar)+1].isdigit():
-                    term = term[0:term.find(indepVar)+1] + indepVar + "^1*" + term[term.find(indepVar)+1:len(term)]
-                    power = 1
-                    coefficient = term[0:term.find(indepVar)] + "*" + term[term.find(indepVar)+1+4:len(term)]
-                else:
-                    term = term[0:term.find(indepVar)+1] + indepVar + "^1" + term[term.find(indepVar)+1:len(term)]
-                    power = 1
-                    coefficient = term[0:term.find(indepVar)] + "*" + term[term.find(indepVar)+1+4:len(term)]
-            else:
-                coefficient = ""
-        else:
-            term = term + "^1"
-            power = 1
-            coefficient = term[0:term.find(indepVar)]
-        #print(coefficient)
-        if coefficient != "":
-            if coefficient[0] == "+":
-                if len(coefficient) == 1:
-                    coefficient = 1
-                else:
-                    coefficient = coefficient[1:len(coefficient)]
-            #print(coefficient)
-            coefficient = funcSolver(getOperandsAndTerms(coefficient)[0],getOperandsAndTerms(coefficient)[1])
-        else:
-            i = 0
-            index = 0
-            while i < 4 and index < len(term):
-                if term[i] == "x":
-                    i += 1
-                elif term[i] == "^" and i == 1:
-                    i += 1
-                elif term[i].isdigit() and i == 2:
-                    i += 1
-                elif term[i].isdigit() == False and i == 3:
-                    i += 1
-                
-                index += 1
-            if index != len(term) and index - 1 != len(term):
-                coefficient = term[0:term.find(indepVar)] + term[index - 1: len(term)]
-                coefficient = funcSolver(getOperandsAndTerms(coefficient)[0],getOperandsAndTerms(coefficient)[1])
-            else:
-                if term[len(term)-1].isdigit() and term[len(term)-2] != "^":
-                    coefficient = term[0:term.find(indepVar)] + "*" + term[len(term)-1]
-                else:
-                    coefficient = term[0:term.find(indepVar)]
-                #print(coefficient)
-                if coefficient != "":
-                    coefficient = funcSolver(getOperandsAndTerms(coefficient)[0],getOperandsAndTerms(coefficient)[1])
-                else:
-                    coefficient = 1
-
-        if power == 0:
-            power = getOperandsAndTerms(term[term.find("^")+1:len(term)])[0]
-            power = power[0]
-        coefficient = str(coefficient) + "*" + str(power)
-        coefficient = funcSolver(getOperandsAndTerms(coefficient)[0],getOperandsAndTerms(coefficient)[1])
-        power = str(float(power) - 1)
-        if float(power) == 0.0:
-            return(str(coefficient))
-        else:
-            return(str(coefficient) + "*" + str(indepVar) + "^" + str(power))
-
-    else:
-        output = 0
-        if term[0] == "+":
-            term = term[1:len(term)]
-        terms = getOperandsAndTerms(term)[0]
-        operands = getOperandsAndTerms(term)[1]
-        print(terms,operands)
-        coefficient = ""
-        num = "" #Numerator
-        denom = "" #Denominator
-        derivatives = {}
-        for i in range(0,len(terms)):
-            if terms[i].find(indepVar) != -1:
-                if i == 0:
-                    num = terms[i]
-                elif operands[i-1] == "*":
-                    if num != "":
-                        num += operands[i-1] + terms[i]
-                    else:
-                        num += terms[i]
-                elif operands[i-1] == "/":
-                    if denom != "":
-                        denom += operands[i-1] + terms[i]
-                    else:
-                        denom += terms[i]
-                    print(i,operands[i-1], terms)
-                elif operands[i-1] == "^" and (terms[i-1].find(indepVar)!= -1 or terms[i].find(indepVar)):
-                    if operands[i-1] == "*":
-                        num += "^" + term[i]
-                    elif operands[i-1] == "/":
-                        denom += "^" + term[i]
-                    else:
-                        print("EXPONENT RAISED TO AN EXPONENT?")
-                #LOG
-                #TRIG
-                #EXPO
-            elif i==0:
-                coefficient == terms[i]
-            elif operands[i-1] == "^":
-                if 0 < i - 2:
-                    if operands[i-2] == "*":
-                        num += operands[i-1] + terms[i]
-                    elif operands[i-2] == "/":
-                        denom += operands[i-1] + terms[i]
-                    else:
-                        print("EXPONENT RAISED TO AN EXPONENT")
-                    
-                elif terms[0].isdigit():
-                    coefficient += operands[i-1]
-                    coefficient += terms[i]
-                else:
-                    num += operands[i-1] + terms[i]
-            else:
-                coefficient += operands[i-1] + terms[i] 
-        if coefficient == "":
-            coefficient = "1"
-        print(num, coefficient)
-        print("______")
-        print(denom)
-        if denom != "": #QUOTIENT RULE
-            output = "("+str(coefficient)+ "*"+ denom+ "*"+ deriv(indepVar, num)+ "-"+ num+ "*"+ deriv(indepVar, denom)+")"+"/"+ denom+ "^2"
-        else:
-            num = getOperandsAndTerms(num)
-            newTerms = []
-            newTerms.append(num[0][0])
-            newOperands = []
-            for  i in range(1,len(num[0])):
-                if num[1][i-1] == "^":
-                    newTerms[len(newTerms)-1] = newTerms[len(newTerms)-1]+"^"+num[0][i]
-                else:
-                    newOperands.append(num[1][i-1])
-                    newTerms.append(num[0][i])
-            print("NUMMM", newTerms)
-            print("DERV:", deriv("x", newTerms[0]), deriv("x", newTerms[1]))
-            print("FOR")
-            output = ""
-            for i in range(0,len(newTerms)):
-                if i != 0:
-                    tempOutput = "+" + newTerms[i]
-                else:
-                    tempOutput = newTerms[i]
-                print(newTerms[i])
-                for k in range(0,len(newTerms)):
-                    if k!=i:
-                        tempOutput += "*" + deriv(indepVar, newTerms[k])
-                        print("*" + deriv(indepVar, newTerms[k]))
-                output += tempOutput
-        #GUTSTUFF    
-        #elif operands[0] == "^":
-        #    print("POWER")
-        return(output)
-    #Quotient
-    #Product
-    #Power
-    #Trig
-    #Log
-    #Expo
-    #Constant
-
-
-
-
-
-
-def getOperandsAndTerms(equation):
-    #initial Seperation
-    terms = []
-    term = ""
-    operands = []
-    letterOperands = "sincotaelg" #Letters in complex operands like trig and log functions
-    p = 0
-    op = 1
-    for i in str(equation):
-        status = 0
-        for letterOp in letterOperands:
-            if i == letterOp:
-                status = 1
-        if i != " " and i != "'"  and i != "[" and i != "]":
-            if i == "(" or i == "{":
-                p += 1
-                if term != "" and term.count("(") == 0:
-                    if letterOperands.find(term[len(term)-1]) == -1:
-                        terms.append(term)
-                        term = ""
-                        op = 0
-                if op == 0 and p == 1:
-                    if len(term) > 0:
-                        if letterOperands.find(term[len(term)-1]) == -1:
-                            operands.append("*")
-                    #print("OP == 0", term, terms, operands)
-                    else:
-                        operands.append("*")
-            elif i == ")" or i == "}":
-                p -= 1
-            if p == 0 and i != ")" and i != "}":
-                if i == "+" or i == "*" or i == "/" or i == "^":
-                    operands.append(i)
-                    op = 1
-                    if term != "":
-                        terms.append(term)
-                        term = ""
-                elif i == "-":
-                    if op == 1:
-                        op = 2
-                        term += i
-                    elif op == 2:
-                        op = 0
-                        term = term[0:len(term)-1]
-                    else:
-                        #minusOperator
-                        operands.append(i)
-                        op = 1
-                        if term != "":
-                            terms.append(term)
-                            term = ""
-                elif i.isdigit() == True or i == "." or status == 1:
-                    if status == 1 and len(term) > 0:
-                        if term[0].isdigit():
-                            terms.append(term)
-                            term = i
-                            operands.append("*")
-                        else:
-                            term += i
-                    else:
-                        term += i
-                        op = 0
-                elif i.isdigit() == False:
-                    if term != "":
-                        terms.append(term)
-                        term = ""
-                        op = 0
-                    terms.append(i)
-                if len(terms) > len(operands) + 1:
-                    operands.append("*")
-                    op = 1
-            elif p == 0 and (i == ")" or i == "}"):
-                term += i
-                terms.append(term)
-                term = ""
-                op = 0
-            else:
-                term += i
-    if term != "":
-        terms.append(term)
-    #print("GottenTerms", terms, "GottenOperands", operands, "from", equation)
-    for i in range(0,len(terms)):
-        #print(terms[i])
-        if terms[i] == "-":
-            terms[i] = "-1"
-    return((terms,operands))
+def funcCompiler(terms, operands):
+    output = ""
+    for i in range(0, len(terms)):
+        output += terms[i]
+        if i < len(terms) - 1:
+            output += operands[i]
+    return(output)
 
 def prenEliminator(terms, operands):
     newTerms = []
@@ -395,6 +90,93 @@ def prenEliminator(terms, operands):
         output = float(output)
         return(output) 
 
+def getOperandsAndTerms(equation):
+    #initial Seperation
+    terms = []
+    term = ""
+    operands = []
+    letterOperands = "sincotaelg" #Letters in complex operands like trig and log functions
+    p = 0
+    op = 1
+    for i in str(equation):
+        status = 0
+        for letterOp in letterOperands:
+            if i == letterOp:
+                status = 1
+        if i != " " and i != "'"  and i != "[" and i != "]":
+            if i == "(" or i == "{":
+                p += 1
+                if term != "" and term.count("(") == 0:
+                    if letterOperands.find(term[len(term)-1]) == -1:
+                        terms.append(term)
+                        term = ""
+                        op = 0
+                if op == 0 and p == 1:
+                    if len(term) > 0:
+                        if letterOperands.find(term[len(term)-1]) == -1:
+                            operands.append("*")
+                    #print("OP == 0", term, terms, operands)
+                    else:
+                        operands.append("*")
+            elif i == ")" or i == "}":
+                p -= 1
+            if p == 0 and i != ")" and i != "}":
+                if i == "+" or i == "*" or i == "/" or i == "^":
+                    operands.append(i)
+                    op = 1
+                    if term != "":
+                        terms.append(term)
+                        term = ""
+                elif i == "-":
+                    if op == 1:
+                        op = 2
+                        term += i
+                    elif op == 2:
+                        op = 0
+                        term = term[0:len(term)-1]
+                    else:
+                        #minusOperator
+                        operands.append(i)
+                        op = 1
+                        if term != "":
+                            terms.append(term)
+                            term = ""
+                elif i.isdigit() == True or i == "." or status == 1:
+                    if status == 1 and len(term) > 0:
+                        if term[0].isdigit():
+                            terms.append(term)
+                            term = i
+                            operands.append("*")
+                        else:
+                            term += i
+                    else:
+                        term += i
+                        op = 0
+                elif i.isdigit() == False:
+                    if term != "":
+                        terms.append(term)
+                        term = ""
+                    op = 0
+                    terms.append(i)
+                if len(terms) > len(operands) + 1:
+                    operands.append("*")
+                    op = 1
+            elif p == 0 and (i == ")" or i == "}"):
+                term += i
+                terms.append(term)
+                term = ""
+                op = 0
+            else:
+                term += i
+    if term != "":
+        terms.append(term)
+    #print("GottenTerms", terms, "GottenOperands", operands, "from", equation)
+    for i in range(0,len(terms)):
+        #print(terms[i])
+        if terms[i] == "-":
+            terms[i] = "-1"
+    return((terms,operands))
+    
 def funcSolver(terms, operands):
     letterOperands = "sincotaelg"
     #print("funcSolverCalled")
@@ -415,13 +197,13 @@ def funcSolver(terms, operands):
                 inside = i[i.find("(")+1:i.find(")")]
                 term = i[0:i.find("(")]
             else:
-                #term = i[i.find("(")+1:len(i)]
+                term = i
                 inside = ""
                 status = 0 
-                for i in term:
-                    if term.isdigit() == False and status == 0:
+                for k in term:
+                    if k.isdigit() and status == 0:
                         #THIS NEEDS TO CHANGE FOR NESTED COMPLEX OPERANDS
-                        inside += i
+                        inside += k
                     else:
                         status += 1
                     if status == 1:
@@ -441,7 +223,7 @@ def funcSolver(terms, operands):
                 else:
                     if len(inside) > 1:
                         inside = prenEliminator(getOperandsAndTerms(inside)[0],getOperandsAndTerms(inside)[1])
-                    newTerms.append(log(float(inside))/log(10))
+                    newTerms.append(round(log(float(inside))/log(10),5))
                 #print("logBase", logBase, "expression", expression)
 
                 #print("Term", term, float(term[3:len(term)]), log(float(term[3:len(term)])))
@@ -454,17 +236,17 @@ def funcSolver(terms, operands):
                 #print(term)
                 #print(i[0:3], term[0:3])
                 if term[0:3] == "sin":
-                    newTerms.append(sin(float(term[3:len(term)])))
+                    newTerms.append(round(sin(float(term[3:len(term)])),5))
                 elif term[0:3] == "cos":
-                    newTerms.append(cos(float(term[3:len(term)])))
+                    newTerms.append(round(cos(float(term[3:len(term)])),5))
                 elif term[0:3] == "tan":
-                    newTerms.append(tan(float(term[3:len(term)])))
+                    newTerms.append(round(tan(float(term[3:len(term)])),5))
                 elif term[0:3] == "sec":
-                    newTerms.append(1/cos(float(term[3:len(term)])))
+                    newTerms.append(round(1/cos(float(term[3:len(term)])),5))
                 elif term[0:3] == "csc":
-                    newTerms.append(1/sin(float(term[3:len(term)])))
+                    newTerms.append(round(1/sin(float(term[3:len(term)])),5))
                 elif term[0:3] == "cot":
-                    newTerms.append(1/tan(float(term[3:len(term)])))
+                    newTerms.append(round(1/tan(float(term[3:len(term)])),5))
                 else:
                     newTerms.append(i)
                     #print("The equation you entered was weird. Maybe you should check it.")
@@ -515,10 +297,201 @@ def funcSolver(terms, operands):
             for k in i:
                 if k.isdigit() == True or k == "." or k == "-":
                     final += str(k)
-        #print(final)
+        #print("FINAL:",final)
         final = float(final)
     ##print("solved:", final)
     return(final)
-    
-print(derivativeHub("y = (x+1)"))
-#print(expressionSplitter("x","2(x+1)^2"))
+
+def funcPlugger(depVar, indepVar, equation, t):
+    if equation.find("=") != -1:
+        equation = equation[equation.find("=")+1:len(equation)]
+    a = getOperandsAndTerms(equation.format(t))
+    b = prenEliminator(a[0],a[1])
+    c = 0
+    #print("Wubbo", equation.format(t),a,b)
+    if isinstance(b, (list,)):
+        #print(b)
+        for i in b:
+            c += float(i)
+    else:
+        c = b
+    if depVar == "x":
+        return(c,t)
+    else:
+        return(t,c)
+        
+def pluggerSetup(depVar, indepVar, equation):
+    output = ""
+    #print("PluggerSetup", depVar, indepVar, equation)
+    for i in equation:
+        #print("plug?", i, i == indepVar)
+        if i == indepVar:
+            if len(output)>0:
+                if output[len(output)-1].isdigit():
+                    output += "*"+"{0}"
+                elif output[len(output)-1] == "-":
+                    output += "1" + "*" + "{0}"
+                else:
+                    output += "{0}"
+            else:
+                output += "{0}"
+                
+        elif len(output)>0: 
+            if output[len(output)-1] == "}" and (i.isdigit() or i == "(" or i == "{"):
+                output += "*"+i
+            else:
+                output += i
+        else:
+            output += i
+        #print(output)
+    return output
+
+def derivHub(depVar, equation):
+    if equation.find("=") != -1:
+        equation = equation[equation.find("=")+1:len(equation)]
+    splittedFunc = derivSplitter(depVar, equation)
+    terms = splittedFunc[0]
+    operands = splittedFunc[1]
+    final = ""
+    #print("Terms",terms, equation)
+    for i in terms:
+        newSplit = getOperandsAndTerms(i)
+        newTerms = newSplit[0]
+        newOperands = newSplit[1]
+        num = [newTerms[0]]
+        denom = []
+        for k in range(0,len(newOperands)):
+            if newOperands[k] == "*":
+                
+                num.append(newTerms[k+1])
+            elif newOperands[k] == "^":
+                num[len(num)-1] += newOperands[k] + newTerms[k+1]
+            elif newOperands[k] == "/":
+                denom.append(newTerms[k+1])
+        conDensedNum = funcCompiler(num,[x for x in "*"*(len(num)-1)])
+        conDensedDenom = funcCompiler(denom,[x for x in "*"*(len(denom)-1)])
+        print("NUM:", num, "DENOM", denom)
+        if final != "":
+            final += "+"
+        if conDensedNum.count(depVar) + conDensedDenom.count(depVar) == 0:
+            final += "0"
+        elif len(num) == 1 and conDensedNum[0]== "(" and conDensedNum[len(conDensedNum)-1] == ")":
+            print("Guts")
+            final += derivHub("x",conDensedNum[1:len(conDensedNum)-1])
+        elif denom != []:
+            final += quotient(conDensedNum,conDensedDenom)
+        elif conDensedNum.count(depVar) == 1:
+            final+=power(num)
+            "PWRRULE"
+        else:
+            final += product(num)
+    print("FINAL", final, "Eqaution", equation)
+    return(final)
+
+def derivSplitter(depVar, expression):
+    terms = getOperandsAndTerms(expression)[0]
+    operands = getOperandsAndTerms(expression)[1]
+    shift = 0
+    shifted = 0
+    for i in range(len(terms)):
+        i = i - shift
+        if shifted == 0:
+            if terms[i].find(depVar) == -1:
+                if len(terms)>i+1:
+                    if terms[i+1].find(depVar) != -1:
+                        if operands[i] == "*" or operands[i] == "/" or operands[i] == "^":
+                            terms[i] = terms[i] + operands[i] + terms[i+1]
+                            del terms[i+1]
+                            del operands[i]
+                            shift += 1
+                            shifted = 1
+                    elif terms[i+1].find(depVar) == -1:
+                        terms[i] = getOperandsAndTerms(terms[i] + operands[i] + terms[i+1])
+                        terms[i] = prenEliminator(terms[i][0],terms[i][1])
+                        del terms[i+1]
+                        del operands[i]
+                        shift += 1
+                        shifted = 1
+            else:
+                if len(operands) >= i+1:
+                    if operands[i] == "*" or operands[i] == "/" or operands[i] == "^":
+                        terms[i] = terms[i] + operands[i] + terms[i+1]
+                        del terms[i+1]
+                        del operands[i]
+                        shift += 1
+                        shifted = 1
+        else:
+            if len(operands) >= i+1 and i != len(terms): 
+                if operands[i] == "*" or operands[i] == "/" or operands[i] == "^":
+                    terms[i] = terms[i] + operands[i] + terms[i+1]
+                    del terms[i+1]
+                    del operands[i]
+                    shift += 1
+            else:
+                shifted = 0
+    for i in range(len(terms)):
+        if i != 0 and i+1 <= len(terms) and len(operands)>0:
+            if operands[i-1] == "-":
+                terms[i] = "-1*"+terms[i]
+                if terms[i].find(depVar) == -1:
+                    terms[i] = getOperandsAndTerms(terms[i])
+                    terms[i] = prenEliminator(terms[i][0],terms[i][1])
+                operands[i-1] = "+"
+    return(terms, operands)
+
+def product(terms):
+    print("PRODUCT", terms)
+    final = ""
+    for i in range(len(terms)):
+        print(i)
+        if i != 0:
+            final += "+"
+        temp = terms[i]
+        for k in range(len(terms)):
+            if i != k:
+                temp += "*" + str(derivHub("x",terms[k]))
+        final += temp
+    print("PRODOUT",final)
+    return(final)
+
+def quotient(num,denom):
+    print("NUMDENOM", num, denom)
+    final = "(" + denom + "*" + "(" + derivHub("x",denom) +")" + "-"  + num + "*" "(" + derivHub("x",denom) + ")" + ")" + "/" + "("+"("+ denom + ")" + "^2" +")"
+    print("final:", final)
+    return(final)
+
+def power(term):
+    terms = getOperandsAndTerms(term)[0]
+    operands = getOperandsAndTerms(term)[1]
+    coefficient = "1"
+    power = "1"
+    base = "x"
+    expo = 0
+    for i in range(len(operands)):
+        if operands[i] == "^":
+            if terms[i].find("x") != -1:
+                base = terms[i]
+                power = terms[i+1]
+            elif terms[i+1].find("x") != -1:
+                print("EXPONENTIAL")
+                expo = 1
+        else:
+            coefficient += "*" + terms[i]
+    if expo == 0:
+        if power.find("x") == -1:
+            power = getOperandsAndTerms(power + "-1")
+            power = str(prenEliminator(power[0],power[1]))
+            if coefficient.find("x") == -1:
+                coefficient = getOperandsAndTerms(coefficient + "*" + "(" + power + "+1" + ")")
+                coefficient = str(prenEliminator(coefficient[0],coefficient[1]))
+                final = coefficient + "*" + base + "^" + "(" + power + ")"
+            else:
+                print("SOMETHING WENT WRONG")
+                final = coefficient + "*" + power + "*" + base + "^" + "(" + power + ")"
+        else:
+            final = coefficient + "*" + power + "*" + base# + "^(" + power + "-1" + ")"
+            print("SOMEThING WENT WRONG")
+    else:
+        final = "EXPO"
+    return(final)
+print("Done",derivHub("x", "y=(2x+1*2)^2"))
