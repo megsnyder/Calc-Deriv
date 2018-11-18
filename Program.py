@@ -413,6 +413,11 @@ def derivative(function, start, end):
                         if dpoints[i+2]<0:
                             print("Local max at: " + str(points[i+1]))
                             extremas.append(points[i+1])
+                        elif dpoints[i+2]==0:
+                            if len(dpoints)>i+3: #this is just in case rounding caused two zero derivatives in a row
+                                if dpoints[i+3]<0:
+                                    print("Local max at: " + str(points[i+2]))
+                                    extremas.append(points[i+2])
             if dpoints[i]<0: #if derivative is negative and then positve, there is a local min at approximately the average of the two x values
                 if dpoints[i+1]>0:
                     print("Local min at: " + str(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2)))
@@ -422,6 +427,12 @@ def derivative(function, start, end):
                         if dpoints[i+2]>0:
                             print("Local min at: " + str(points[i+1]))
                             extremas.append(points[i+1])
+                        elif dpoints[i+2]==0:
+                            if len(dpoints)>i+3: #this is just in case rounding caused two zero derivatives in a row
+                                if dpoints[i+3]>0:
+                                    print("Local min at: " + str(points[i+2]))
+                                    extremas.append(points[i+2])
+
                             
     maxabsolute=[] #list of absolute maxes
     if len(extremas)>0: #if any extremas exist, (which they have to), then we check what the biggest one is
