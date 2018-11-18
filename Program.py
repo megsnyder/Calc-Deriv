@@ -487,6 +487,11 @@ def derivative(function, start, end):
                         if d2points[i+2]<0:
                             print("Point of inflection at: " + str(dpointsfull[i+1]))
                             poi.append(dpointsfull[i+1])
+                        elif d2points[i+2]==0:
+                            if len(d2points)>i+3: #this is just in case rounding caused two zero derivatives in a row
+                                if d2points[i+3]<0:
+                                    print("Point of inflection at: " + str(dpointsfull[i+2]))
+                                    poi.append(dpointsfull[i+2])
             if d2points[i]<0: #if second derivative is negative, then positive, there is a point of inflection at about the average of x values of those two points
                 if d2points[i+1]>0:
                     print("Point of inflection at: " + str(funcInterpreter("y","x",function,(dpointsfull[i][0]+dpointsfull[i+1][0])/2)))
@@ -496,7 +501,11 @@ def derivative(function, start, end):
                         if d2points[i+2]>0:
                             print("Point of inflection at: " + str(dpointsfull[i+1]))
                             poi.append(dpointsfull[i+1])
-            
+                        elif d2points[i+2]==0:
+                            if len(d2points)>i+3: #this is just in case rounding caused two zero derivatives in a row
+                                if d2points[i+3]>0:
+                                    print("Point of inflection at: " + str(dpointsfull[i+2]))
+                                    poi.append(dpointsfull[i+2])
     poisort=[] #list of points of inflection sorted by x values
     for i in range(0,len(poi)): #runs through the points of inflection and adds them in order
         poisort.append(poi[i])
