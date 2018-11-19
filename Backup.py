@@ -401,18 +401,16 @@ def derivative(function, start, end):
             i+=0.05
             print("point out of domain")
     
-    degreeofprecision = 1 #We find the numerical derivative by using very small secant lines (this is the distance in the x direction of the points we create the secant line with)
+    degreeofprecision = 0.1 #We find the numerical derivative by using very small secant lines (this is the distance in the x direction of the points we create the secant line with)
     for i in range(0,len(points)): #adds points to derivate and second derivative
-        dpoints.append((funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1]-points[i][1])/(funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[0]-points[i][0])) #first derivative using limit definition and substituting .000001 in for h, rounded to 4 decimals
-        dpoint=(points[i][0],((funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1]-points[i][1])/(funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[0]-points[i][0]))) #(x, first derivative)
+        dpoints.append((funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1]-points[i][1])/(degreeofprecision)) #first derivative using limit definition and substituting .000001 in for h, rounded to 4 decimals
+        dpoint=(points[i][0],((funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1]-points[i][1])/(degreeofprecision))) #(x, first derivative)
         dpointsfull.append(dpoint) #adds the full points of derivative to the list
-        d1=(funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1]-points[i][1])/(funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[0]-points[i][0]) #again derivative substituting .000001 in for h
-        d1 = (points[i][0], d1)
-        #print(d1)
-        d2=(funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1]-funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1])/(funcInterpreter("y","x",function,points[i][0]+degreeofprecision*2)[0]-funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[0]) #first derivative using the x value of the previous line (ends up .000002 away from original point)
-        d2 = (funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[0],d2)
-        #print("2",d2)
-        d2points.append(((d2[1]-d1[1])/(degreeofprecision+d2[0]-d1[0]))) #adds to the list of second derivatives the slope between the two first derivatives found
+        d1=(funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1]-points[i][1])/(degreeofprecision) #again derivative substituting .000001 in for h
+        
+        d2=(funcInterpreter("y","x",function,points[i][0]+2*degreeofprecision)[1]-funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1])/(degreeofprecision) #first derivative using the x value of the previous line (ends up .000002 away from original point)
+        print("2",d2,"1",d1, d2-d1,(d2-d1)/degreeofprecision)
+        d2points.append(((d2-d1)/(degreeofprecision))) #adds to the list of second derivatives the slope between the two first derivatives found
     extremas=[] #list of all the local extrema
     
     #first checking the endpoints of the function for local extrema
