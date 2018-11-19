@@ -421,15 +421,6 @@ def derivative(function, start, end):
             extremas.append(points[0])
     except:
         print("Starting point is not in the domain of the function. This could result in faulty conacivty and increasing/decreasing intervals.")
-    try:
-        if funcInterpreter("y","x",function,end)[1]>funcInterpreter("y","x",function,end)[1]: #do the same for the end point
-            print("Local max at: " + str(points[len(points)-1]))
-            extremas.append(points[len(points)-1])
-        elif funcInterpreter("y","x",function,end)[1]<funcInterpreter("y","x",function,end-degreeofprecision)[1]:
-            print("Local min at: " + str(points[len(points)-1]))
-            extremas.append(points[len(points)-1])
-    except:
-        print("Ending point is not in the domain of the function. This could result in faulty conacivty and increasing/decreasing intervals.")
     #next checking sign changes in the derivative
     for i in range(0,len(dpoints)): #iterate through the list of derivatives
         if len(dpoints)>i+1: #only runs if within the range of the loop
@@ -461,7 +452,15 @@ def derivative(function, start, end):
                                 if dpoints[i+3]>0:
                                     print("Local min at: " + str(points[i+2]))
                                     extremas.append(points[i+2])
-
+    try:
+        if funcInterpreter("y","x",function,end)[1]>funcInterpreter("y","x",function,end)[1]: #do the same for the end point
+            print("Local max at: " + str(points[len(points)-1]))
+            extremas.append(points[len(points)-1])
+        elif funcInterpreter("y","x",function,end)[1]<funcInterpreter("y","x",function,end-degreeofprecision)[1]:
+            print("Local min at: " + str(points[len(points)-1]))
+            extremas.append(points[len(points)-1])
+    except:
+        print("Ending point is not in the domain of the function. This could result in faulty conacivty and increasing/decreasing intervals.")
                             
     maxabsolute=[] #list of absolute maxes
     if len(extremas)>0: #if any extremas exist, (which they have to), then we check what the biggest one is
