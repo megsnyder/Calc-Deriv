@@ -259,7 +259,7 @@ def funcSolver(terms, operands):
                     #print(logBase)
                     if len(expression) > 1:
                         expression = str(prenEliminator(getOperandsAndTerms(expression)[0],getOperandsAndTerms(expression)[1]))
-                    newTerms.append(log(float(expression))/log(float(logBase)))
+                    newTerms.append(round(log(float(expression))/log(float(logBase)),5))
                 else:
                     if len(inside) > 1:
                         inside = prenEliminator(getOperandsAndTerms(inside)[0],getOperandsAndTerms(inside)[1])
@@ -393,8 +393,11 @@ def derivative(function, start, end):
     i=start #start of the interval
     
     while i<= end: #runs through interval from start to end, adds points on the function
-        points.append(funcInterpreter("y","x",function,i))
-        i+=0.01
+        try:
+            points.append(funcInterpreter("y","x",function,i))
+            i+=0.1
+        except:
+            pass
     
     degreeofprecision = 0.0001 #We find the numerical derivative by using very small secant lines (this is the distance in the x direction of the points we create the secant line with)
     for i in range(0,len(points)): #adds points to derivate and second derivative
