@@ -1,14 +1,14 @@
 from math import sin, cos, tan, log
 
-def funcCompiler(terms, operands):
+def funcCompiler(terms, operands):#Take a liste of operands and terms and compiles them into a single string
     output = ""
     for i in range(0, len(terms)):
         output += terms[i]
-        if i < len(terms) - 1:
+        if i < len(terms) - 1: #If not the last term, add an operand after the term
             output += operands[i]
     return(output)
 
-def prenEliminator(terms, operands):
+def prenEliminator(terms, operands): #This function (combined with func solver) will complete order of operations. This functions specializes in terms with parenthesis.
     newTerms = []
     operators = []
     for z in terms:
@@ -20,35 +20,36 @@ def prenEliminator(terms, operands):
     
     while pp == 1 and g != 20:
         g += 1
-        pcheck = ""
-        letterOperands = "sincotaelg"
-        status = 0
-        for i in range(0,len(newTerms)):
+        pcheck = ""#A variable to determine how many parenthesis there are left over
+        letterOperands = "sincotaelg"#The letters of the complex operands (sin, cos, tan, cot, sec, csc, and log)
+        status = 0 #Status indicator of the presence of the letters of complex operands
+        for i in range(0,len(newTerms)):#This loop checks for complex operands
             status = 0
             for k in letterOperands:
                 if newTerms[i].find(k) != -1:
                     status += 1
-            if status != 0:
+            if status != 0:#If a complex operand is present, funcsolver will operate on the term in order to get a number
                 newTerms[i] = str(funcSolver(getOperandsAndTerms(newTerms[i])[0],getOperandsAndTerms(newTerms[i])[1]))
-        if status == 0:
+        if status == 0:#If no complex operands were found...
             for i in range(0,len(newTerms)):
-                if str(newTerms[i]).isdigit() == False:
-                    #print("Non-int detected in prenElim")
-                    p = str(newTerms[i]).count("(")
+                if str(newTerms[i]).isdigit() == False:#If non-numerical characters are in the string...
+                    p = str(newTerms[i]).count("(") #Check the number of opening parenthesis
                     term = ""
                     newTerm = ""
                     outside = ""
                     for k in range(len(newTerms[i])):
+                        '''Here I seperate things outside of the parenthesis and inside the parenthesis
+                        4(6+x)
+                        becomes
+                        outside = 4 + place holder for substitution ("{0}")
+                        term = 6+x
+                        '''
                         currentTerm = (newTerms[i])[k]
                         term += currentTerm
                         if currentTerm == "(":
-                            #print("Hey we found an opening parenthesis!", newTerms, k)
                             outside += term[0:len(term)-1:]
-                            #print("This is the outside:", outside)
                             if len(outside) > 0:
-                                #print("The outside is longer than 0")
                                 if outside[len(outside) - 1] == ")" or outside[len(outside) - 1].isdigit() == True or outside[len(outside) - 1] == "x" or outside[len(outside) - 1] == "y":
-                                    #print("We decided to add a multiplier")
                                     outside += "*"
                             term = "("
                         elif currentTerm == ")" and term[0] == "(" and len(term[1:len(term)-1:]) > 0:
@@ -544,3 +545,5 @@ def power(term):
     elif expo == 1 and power != "x":
         final += "*("+derivHub("x",power) +")"
     return(final)
+    
+print(derivHub("x", "y=x^(2x+1)"))
