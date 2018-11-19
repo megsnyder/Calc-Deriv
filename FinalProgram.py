@@ -583,6 +583,10 @@ def power(term):#Power Rule
         final = base + "^" + power + "*log(" + base + ",e)" #Exponential
     if base != "x" and expo == 0:
         final += "*("+ derivHub("x",base) +")"
+    if expo == 1 and power != "x":
+        final += "*("+ derivHub("x",power) +")"
+    if expo == 1 and base.isdigit() == False:
+        final += "*("+ derivHub("x",base) +")"
     elif expo == 1 and power != "x":
         final += "*("+derivHub("x",power) +")"
     return(final)
@@ -649,8 +653,11 @@ def derivative(function, start, end):
                                     extremas.append(points[i+2])
             if dpoints[i]<0: #if derivative is negative and then positve, there is a local min at approximately the average of the two x values
                 if dpoints[i+1]>0:
-                    print("Local min at: " + str(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2)))
-                    extremas.append(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2))
+                    try:
+                        print("Local min at: " + str(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2)))
+                        extremas.append(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2))
+                    except:
+                        print("Local min at: "+(points[i][0]+points[i+1][0])/2)+"but the term is undefined due to python's binary conversion to base ten, so the rest of results may be off.")
                 elif dpoints[i+1]==0: #detects a sign change if there is a zero in between, and adds the extrema
                     if len(dpoints)>i+2:
                         if dpoints[i+2]>0:
@@ -764,5 +771,5 @@ function=input("Function: ") #input the function
 start=float(input("Start: ")) #input the start of the interval 
 end=float(input("End: ")) #input the end of the interval
 derivative(function, start, end) #calls the derivative function
-equation = "y=", derivHub("x", function)
+equation = "y=" +str(derivHub("x", function))
 print(equation)
