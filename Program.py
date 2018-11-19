@@ -1,4 +1,26 @@
 from math import log, sin, cos, tan
+
+print("""Welcome To Meg and Noah's Calculus Project:
+The Derivative Calculator
+This calculator will ask you for an equation in terms of x (make sure it is lower cased) and an interval (it is broken down into starting and ending points).
+Please make sure the starting point is less than the ending point
+Example: 
+Function: y = x^2-2x+sin(5)
+Start: -4
+End: 4
+Once proper inputs are evaluated, this program will return:
+Local Extremas
+Absolute Extremas
+Increase/Decreasing Intervals
+Concave Up/Down Intervals
+Points of Inflection
+The Algebraic Derivative (We have not done exstensive testing, so take Algebraic derivatives with a grain of salt)
+P.S. When using logarithms, we will default to base ten, but if you want -
+a different base you can use a comma seperating the term and log
+Example 1: log(10) = 1
+Example 2: log(400,20) = log(400)/log(20) = 2
+""")
+
 def funcInterpreter(depVar, indepVar, equation,t):
     if equation.count("(") != equation.count(")") or equation.count("=") != 1:
         print("Invalid input given")
@@ -520,10 +542,10 @@ def derivative(function, start, end):
                 print("Concave down on interval: (" + str(poisort[i][0]) + ", " + str(poisort[i+1][0]) + ")")
     
 
-#function=input("Function: ") #input the function
-#start=float(input("Start: ")) #input the start of the interval 
-#end=float(input("End: ")) #input the end of the interval
-function = "y=-1*x^4+x^2"
-start = float("-1")
-end = float("1")
+function=input("Function: ") #input the function
+start=float(input("Start: ")) #input the start of the interval 
+end=float(input("End: ")) #input the end of the interval
+#function = "y=-1*x^4+x^2"
+#start = float("0")
+#end = float("0")
 derivative(function, start, end) #calls the derivative function
