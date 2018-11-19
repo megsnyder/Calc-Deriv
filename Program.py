@@ -18,6 +18,7 @@ The Algebraic Derivative (We have not done exstensive testing, so take Algebraic
 P.S. When using logarithms, we will default to base ten, but if you want a different base you can use a comma seperating the term and log
 Example 1: log(10) = 1
 Example 2: log(400,20) = log(400)/log(20) = 2
+Also, pleasre make sure endpoints are in the interval, because our increasing/decreasing and concavity intervals depend upon them.
 """)
 
 def funcInterpreter(depVar, indepVar, equation,t):
