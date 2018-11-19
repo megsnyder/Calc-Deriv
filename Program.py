@@ -397,32 +397,39 @@ def derivative(function, start, end):
             points.append(funcInterpreter("y","x",function,i))
             i+=0.1
         except:
-            pass
+            i+=0.1
     
     degreeofprecision = 0.0001 #We find the numerical derivative by using very small secant lines (this is the distance in the x direction of the points we create the secant line with)
     for i in range(0,len(points)): #adds points to derivate and second derivative
-        dpoints.append(((funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1]-points[i][1])/degreeofprecision)) #first derivative using limit definition and substituting .000001 in for h, rounded to 4 decimals
-        dpoint=(points[i][0],round(((funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1]-points[i][1])/degreeofprecision),4)) #(x, first derivative)
+        dpoints.append((funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1]-points[i][1])/(funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[0]-points[i][0])) #first derivative using limit definition and substituting .000001 in for h, rounded to 4 decimals
+        dpoint=(points[i][0],((funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1]-points[i][1])/(funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[0]-points[i][0]))) #(x, first derivative)
         dpointsfull.append(dpoint) #adds the full points of derivative to the list
-        d1=(funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1]-points[i][1])/degreeofprecision #again derivative substituting .000001 in for h
-        d2=(funcInterpreter("y","x",function,points[i][0]+degreeofprecision*2)[1]-funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1])/degreeofprecision #first derivative using the x value of the previous line (ends up .000002 away from original point)
-        d2points.append(round(((d2-d1)/degreeofprecision),4)) #adds to the list of second derivatives the slope between the two first derivatives found
+        d1=(funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1]-points[i][1])/(funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[0]-points[i][0]) #again derivative substituting .000001 in for h
+        d1 = (points[i][0], d1)
+        d2=(funcInterpreter("y","x",function,points[i][0]+degreeofprecision*2)[1]-funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1])/(funcInterpreter("y","x",function,points[i][0]+degreeofprecision*2)[0]-funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[0]) #first derivative using the x value of the previous line (ends up .000002 away from original point)
+        d2 = (funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[0],d2)
+        d2points.append(((d2[1]-d1[1])/(d2[0]-d1[0]))) #adds to the list of second derivatives the slope between the two first derivatives found
     extremas=[] #list of all the local extrema
     
     #first checking the endpoints of the function for local extrema
-    if funcInterpreter("y","x",function,start)[1]>funcInterpreter("y","x",function,start+degreeofprecision)[1]: #if the starting point is greater than a point very close to it, there is a local max there
-        print("Local max at: " + str(points[0]))
-        extremas.append(points[0]) #adds to the grand list of locals
-    elif funcInterpreter("y","x",function,start)[1]<funcInterpreter("y","x",function,start+degreeofprecision)[1]: #if the starting point is smaller than a point very close to it, local min
-        print("Local min at: " + str(points[0]))
-        extremas.append(points[0])
-    if funcInterpreter("y","x",function,end)[1]>funcInterpreter("y","x",function,end-degreeofprecision)[1]: #do the same for the end point
-        print("Local max at: " + str(points[len(points)-1]))
-        extremas.append(points[len(points)-1])
-    elif funcInterpreter("y","x",function,end)[1]<funcInterpreter("y","x",function,end-degreeofprecision)[1]:
-        print("Local min at: " + str(points[len(points)-1]))
-        extremas.append(points[len(points)-1])
-    
+    try:
+        if funcInterpreter("y","x",function,start)[1]>funcInterpreter("y","x",function,start+degreeofprecision)[1]: #if the starting point is greater than a point very close to it, there is a local max there
+            print("Local max at: " + str(points[0]))
+            extremas.append(points[0]) #adds to the grand list of locals
+        elif funcInterpreter("y","x",function,start)[1]<funcInterpreter("y","x",function,start+degreeofprecision)[1]: #if the starting point is smaller than a point very close to it, local min
+            print("Local min at: " + str(points[0]))
+            extremas.append(points[0])
+    except:
+        print("Starting point is not in the domain of the function. This could result in faulty conacivty and increasing/decreasing intervals.")
+    try:
+        if funcInterpreter("y","x",function,end)[1]>funcInterpreter("y","x",function,end)[1]: #do the same for the end point
+            print("Local max at: " + str(points[len(points)-1]))
+            extremas.append(points[len(points)-1])
+        elif funcInterpreter("y","x",function,end)[1]<funcInterpreter("y","x",function,end-degreeofprecision)[1]:
+            print("Local min at: " + str(points[len(points)-1]))
+            extremas.append(points[len(points)-1])
+    except:
+        print("Ending point is not in the domain of the function. This could result in faulty conacivty and increasing/decreasing intervals.")
     #next checking sign changes in the derivative
     for i in range(0,len(dpoints)): #iterate through the list of derivatives
         if len(dpoints)>i+1: #only runs if within the range of the loop
@@ -542,7 +549,7 @@ def derivative(function, start, end):
                 print("Concave up on interval: (" + str(poisort[i][0]) + ", " + str(poisort[i+1][0]) + ")")
             if d1>d2: #if the derivative at the point of inflection or endpoint is bigger than the next point of inflection, the function is concave down between them, open brackets
                 print("Concave down on interval: (" + str(poisort[i][0]) + ", " + str(poisort[i+1][0]) + ")")
-    
+    #print(points,dpoints,d2points)    
 
 function=input("Function: ") #input the function
 start=float(input("Start: ")) #input the start of the interval 
