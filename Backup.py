@@ -552,7 +552,6 @@ def derivative(function, start, end):
                 print("Concave up on interval: (" + str(poisort[i][0]) + ", " + str(poisort[i+1][0]) + ")")
             if d1>d2: #if the derivative at the point of inflection or endpoint is bigger than the next point of inflection, the function is concave down between them, open brackets
                 print("Concave down on interval: (" + str(poisort[i][0]) + ", " + str(poisort[i+1][0]) + ")")
-    print("d2",d2points)
 function=input("Function: ") #input the function
 start=float(input("Start: ")) #input the start of the interval 
 end=float(input("End: ")) #input the end of the interval
