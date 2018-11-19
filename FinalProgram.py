@@ -1,6 +1,6 @@
 from math import log, sin, cos, tan
 
-print("""Welcome To Meg and Noah's Calculus Project:
+"""Welcome To Meg and Noah's Calculus Project:
 The Derivative Calculator
 This calculator will ask you for an equation in terms of x (make sure it is lower cased) and an interval (it is broken down into starting and ending points).
 Please make sure the starting point is less than the ending point
@@ -14,12 +14,16 @@ Absolute Extremas
 Increase/Decreasing Intervals
 Concave Up/Down Intervals
 Points of Inflection
-The Algebraic Derivative (We have not done exstensive testing, so take Algebraic derivatives with a grain of salt)
+The Algebraic Derivative (We have not done exstensive testing, so take Algebraic derivatives with a grain of salt - especially its use of the chain rule)
+Also, the algebraic derivative does not work for exponential equations with variable.
 P.S. When using logarithms, we will default to base ten, but if you want a different base you can use a comma seperating the term and log
 Example 1: log(10) = 1
 Example 2: log(400,20) = log(400)/log(20) = 2
-Also, pleasre make sure endpoints are in the interval, because our increasing/decreasing and concavity intervals depend upon them.
-""")
+Also, please make sure endpoints are in the interval, because our increasing/decreasing and concavity intervals depend upon them.
+
+
+
+"""
 
 def funcInterpreter(depVar, indepVar, equation,t):
     if equation.count("(") != equation.count(")") or equation.count("=") != 1:#This makes sure a valid equation has been enterred
@@ -581,14 +585,15 @@ def power(term):#Power Rule
             final = coefficient + "*" + power + "*" + base + "^(" + power + "-1" + ")"
     else:
         final = base + "^" + power + "*log(" + base + ",e)" #Exponential
-    if base != "x" and expo == 0:
+    if base.count("x") != 1 and expo == 0:
         final += "*("+ derivHub("x",base) +")"
-    if expo == 1 and power != "x":
-        final += "*("+ derivHub("x",power) +")"
+    
     if expo == 1 and base.isdigit() == False:
         final += "*("+ derivHub("x",base) +")"
-    elif expo == 1 and power != "x":
+    
+    if expo == 1 and power != "x":
         final += "*("+derivHub("x",power) +")"
+    
     return(final)
 
 def derivative(function, start, end):
@@ -657,7 +662,7 @@ def derivative(function, start, end):
                         print("Local min at: " + str(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2)))
                         extremas.append(funcInterpreter("y","x",function,(points[i][0]+points[i+1][0])/2))
                     except:
-                        print("Local min at: "+(points[i][0]+points[i+1][0])/2)+"but the term is undefined due to python's binary conversion to base ten, so the rest of results may be off.")
+                        print("Local min at: "+str((points[i][0]+points[i+1][0])/2)+" but the term is undefined due to python's binary conversion to base ten, so the rest of results may be off.")
                 elif dpoints[i+1]==0: #detects a sign change if there is a zero in between, and adds the extrema
                     if len(dpoints)>i+2:
                         if dpoints[i+2]>0:
