@@ -316,20 +316,18 @@ def funcSolver(terms, operands):
             for k in i:
                 if k.isdigit() == True or k == "." or k == "-":
                     final += str(k)
-        #print("FINAL:",final)
         final = float(final)
     ##print("solved:", final)
     return(final)
 
 def funcPlugger(depVar, indepVar, equation, t):
+    t = round(t,7)
     if equation.find("=") != -1:
         equation = equation[equation.find("=")+1:len(equation)]
     a = getOperandsAndTerms(equation.format(t))
     b = prenEliminator(a[0],a[1])
     c = 0
-    #print("Wubbo", equation.format(t),a,b)
     if isinstance(b, (list,)):
-        #print(b)
         for i in b:
             c += float(i)
     else:
@@ -373,13 +371,13 @@ def derivative(function, start, end):
     
     i=start #start of the interval
     
-    while i<=end: #runs through interval from start to end, adds points on the function
-        points.append(funcInterpreter("y","x",function,round(i,5)))
-        i+=0.1
+    while i<= end: #runs through interval from start to end, adds points on the function
+        points.append(funcInterpreter("y","x",function,i))
+        i+=0.01
     
     degreeofprecision = 0.0001 #We find the numerical derivative by using very small secant lines (this is the distance in the x direction of the points we create the secant line with)
     for i in range(0,len(points)): #adds points to derivate and second derivative
-        dpoints.append(round(((funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1]-points[i][1])/degreeofprecision),4)) #first derivative using limit definition and substituting .000001 in for h, rounded to 4 decimals
+        dpoints.append(((funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1]-points[i][1])/degreeofprecision)) #first derivative using limit definition and substituting .000001 in for h, rounded to 4 decimals
         dpoint=(points[i][0],round(((funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1]-points[i][1])/degreeofprecision),4)) #(x, first derivative)
         dpointsfull.append(dpoint) #adds the full points of derivative to the list
         d1=(funcInterpreter("y","x",function,points[i][0]+degreeofprecision)[1]-points[i][1])/degreeofprecision #again derivative substituting .000001 in for h
@@ -525,7 +523,7 @@ def derivative(function, start, end):
 #function=input("Function: ") #input the function
 #start=float(input("Start: ")) #input the start of the interval 
 #end=float(input("End: ")) #input the end of the interval
-function = "y=sin(x)"
-start = float("-10")
-end = float("10")
+function = "y=-1*x^4+x^2"
+start = float("-1")
+end = float("1")
 derivative(function, start, end) #calls the derivative function
