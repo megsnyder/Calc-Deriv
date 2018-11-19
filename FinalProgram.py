@@ -22,31 +22,24 @@ Also, pleasre make sure endpoints are in the interval, because our increasing/de
 """)
 
 def funcInterpreter(depVar, indepVar, equation,t):
-    if equation.count("(") != equation.count(")") or equation.count("=") != 1:
+    if equation.count("(") != equation.count(")") or equation.count("=") != 1:#This makes sure a valid equation has been enterred
         print("Invalid input given")
     else:
         newEquation = ""
         for i in equation:
             if i != " ":
                 newEquation += i
-        #print("Interpreting:", newEquation)
-        if newEquation.find("=") != 1:
+        if newEquation.find("=") != 1:#Another check for valid equations
             print("Implementation of implicits needed")
         else:
-             equationR = newEquation[newEquation.find("=")+1: len(newEquation)]
-        #     print("equationR", equationR)
-             if equationR.count(indepVar) > 0 or indepVar == "nil":
-                  pluggableEquation = pluggerSetup(depVar, indepVar, equationR)
-        #          print("pluggable:", pluggableEquation)
+             equationR = newEquation[newEquation.find("=")+1: len(newEquation)]#This makes sure we are focusing on the right side of the equation
+             if equationR.count(indepVar) > 0 or indepVar == "nil":#If variables are present...
+                  pluggableEquation = pluggerSetup(depVar, indepVar, equationR)#Formatting the equation properly
              else:
                   b = getOperandsAndTerms(equationR)
                   pluggableEquation = prenEliminator(b[0],b[1])
         points = []
-        #for i in range(1,10):
-        #    points.append((funcPlugger(depVar, indepVar, str(pluggableEquation), i)))
         points = (funcPlugger(depVar, indepVar, str(pluggableEquation), t))
-        #points = "nil"
-        
         return(points)
 
 def funcCompiler(terms, operands):#Take a liste of operands and terms and compiles them into a single string
@@ -608,7 +601,7 @@ def derivative(function, start, end):
             i+=0.05
         except:
             i+=0.05
-            print("point out of domain")
+            print("Point out of domain or binary conversion yielded term in exponential notation: x = ", i)
     
     degreeofprecision = 0.1 #We find the numerical derivative by using very small secant lines (this is the distance in the x direction of the points we create the secant line with)
     for i in range(0,len(points)): #adds points to derivate and second derivative
@@ -771,4 +764,5 @@ function=input("Function: ") #input the function
 start=float(input("Start: ")) #input the start of the interval 
 end=float(input("End: ")) #input the end of the interval
 derivative(function, start, end) #calls the derivative function
-print("y = ", derivHub("x", function))
+equation = "y=", derivHub("x", function)
+print(equation)
