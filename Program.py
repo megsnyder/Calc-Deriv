@@ -15,8 +15,7 @@ Increase/Decreasing Intervals
 Concave Up/Down Intervals
 Points of Inflection
 The Algebraic Derivative (We have not done exstensive testing, so take Algebraic derivatives with a grain of salt)
-P.S. When using logarithms, we will default to base ten, but if you want -
-a different base you can use a comma seperating the term and log
+P.S. When using logarithms, we will default to base ten, but if you want a different base you can use a comma seperating the term and log
 Example 1: log(10) = 1
 Example 2: log(400,20) = log(400)/log(20) = 2
 """)
@@ -545,7 +544,4 @@ def derivative(function, start, end):
 function=input("Function: ") #input the function
 start=float(input("Start: ")) #input the start of the interval 
 end=float(input("End: ")) #input the end of the interval
-#function = "y=-1*x^4+x^2"
-#start = float("0")
-#end = float("0")
 derivative(function, start, end) #calls the derivative function
